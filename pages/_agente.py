@@ -10,6 +10,22 @@ import time
 if "resultado_final" not in st.session_state:
     st.session_state.resultado_final = None
 
+def sua_funcao_do_agente(): # Procure o início da função da página
+    # 1. ESTA DEVE SER A PRIMEIRA LINHA DE CÓDIGO DENTRO DA FUNÇÃO
+    st.set_page_config(layout="wide") 
+
+    # 2. LOGO ABAIXO, COLE O BLOCO DE ESTILO:
+    st.markdown("""
+        <style>
+            /* Expande a área útil para 95% da tela */
+            .main .block-container {
+                max-width: 95% !important;
+                padding-left: 2rem !important;
+                padding-right: 2rem !important;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+
 # =========================================
 # CONFIGURAÇÃO E ESTADO INICIAL
 # =========================================
