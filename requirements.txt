@@ -10,3 +10,4 @@ huggingface
 python-dotenv
 python-dotenv
 mercadopago
+fpdf2
