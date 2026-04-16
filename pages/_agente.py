@@ -12,19 +12,22 @@ if "resultado_final" not in st.session_state:
 
 def sua_funcao_do_agente(): # Procure o início da função da página
     # 1. ESTA DEVE SER A PRIMEIRA LINHA DE CÓDIGO DENTRO DA FUNÇÃO
-    st.set_page_config(layout="wide") 
+  st.set_page_config(layout="wide") # ISSO AQUI É OBRIGATÓRIO
 
-    # 2. LOGO ABAIXO, COLE O BLOCO DE ESTILO:
-    st.markdown("""
-        <style>
-            /* Expande a área útil para 95% da tela */
-            .main .block-container {
-                max-width: 95% !important;
-                padding-left: 2rem !important;
-                padding-right: 2rem !important;
-            }
-        </style>
-    """, unsafe_allow_html=True)
+st.markdown("""
+    <style>
+        /* Força o conteúdo a ocupar 95% da largura da tela */
+        .main .block-container {
+            max-width: 95% !important;
+            padding-left: 2rem !important;
+            padding-right: 2rem !important;
+        }
+        /* Remove o espaço em branco gigante no topo */
+        .stApp {
+            margin: 0 auto;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
 # =========================================
 # CONFIGURAÇÃO E ESTADO INICIAL
