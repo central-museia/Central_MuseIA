@@ -16,13 +16,13 @@ def sua_funcao_do_agente(): # Procure o início da função da página
 
 st.markdown("""
     <style>
-        /* Força o conteúdo a ocupar 95% da largura da tela */
+        /* Isso aqui LIBERA a página, não engessa. Pode manter! */
         .main .block-container {
-            max-width: 95% !important;
+            max-width: 95% !important; 
             padding-left: 2rem !important;
             padding-right: 2rem !important;
         }
-        /* Remove o espaço em branco gigante no topo */
+        /* Remove o topo vazio */
         .stApp {
             margin: 0 auto;
         }
