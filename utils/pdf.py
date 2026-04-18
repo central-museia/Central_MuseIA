@@ -16,7 +16,8 @@ def ler_pdf_completo(arquivo):
     """Lê o PDF do cliente integralmente sem perdas."""
     texto_bruto = ""
     try:
-        with pdfplumber.open(arquivo) as pdf:
+        # Abre o arquivo a partir do buffer do Streamlit
+        with pdfplumber.open(io.BytesIO(arquivo.getvalue())) as pdf:
             for pagina in pdf.pages:
                 conteudo = pagina.extract_text()
                 if conteudo: 
@@ -34,10 +35,13 @@ def ler_arquivo(arquivo):
             return ler_pdf_completo(arquivo)
 
         elif nome_arquivo.endswith('.csv'):
+            # Reinicia o ponteiro do arquivo para garantir leitura do início
+            arquivo.seek(0)
             df = pd.read_csv(arquivo)
             return df.to_string()
 
         elif nome_arquivo.endswith('.txt'):
+            arquivo.seek(0)
             return arquivo.read().decode("utf-8")
 
         return "Formato de arquivo não suportado."
@@ -56,47 +60,48 @@ def exportar_resultado_pdf(texto_resultado, agente_nome):
     c = canvas.Canvas(buffer, pagesize=A4)
     largura, altura = A4
 
-    # 1. Carregar Fonte (Adeus erro de acentuação!)
+    # 1. Carregar Fonte (Resolve erro de acentuação)
     try:
-        # Certifique-se que o arquivo .ttf está na pasta fonts/
+        # Certifique-se que DejaVuSans.ttf está em: fonts/DejaVuSans.ttf
         pdfmetrics.registerFont(TTFont('DejaVu', 'fonts/DejaVuSans.ttf'))
         fonte_principal = 'DejaVu'
     except:
-        fonte_principal = 'Helvetica' # Fallback se a fonte falhar
+        fonte_principal = 'Helvetica' # Fallback se a fonte não for encontrada
 
-    # 2. Cabeçalho Visual MuseIA (Assinatura da Marca)
-    c.setFillColorRGB(0.02, 0.05, 0.1) # Fundo Escuro Profissional
+    # 2. Cabeçalho Visual MuseIA
+    c.setFillColorRGB(0.02, 0.05, 0.1) # Azul Profundo
     c.rect(0, altura - 80, largura, 80, fill=1, stroke=0)
     
-    c.setFillColor(colors.HexColor("#00FFCC")) # Verde Neon MuseIA
+    # CORREÇÃO: HexColor com H maiúsculo
+    c.setFillColor(colors.HexColor("#00FFCC")) 
     c.setFont(fonte_principal, 18)
     c.drawString(40, altura - 45, "MUSEIA DIGITAL")
     
     c.setFillColor(colors.white)
     c.setFont(fonte_principal, 9)
     c.drawString(40, altura - 62, f"RELATÓRIO: {agente_nome.upper()}")
-    c.drawRightString(largura - 40, altura - 62, f"GERADO EM: {datetime.now().strftime('%d/%m/%Y %H:%M')}")
+    c.drawRightString(largura - 40, altura - 62, f"DATA: {datetime.now().strftime('%d/%m/%Y %H:%M')}")
 
     # 3. Corpo do Texto (Processamento de Linhas)
     y = altura - 110
     c.setFillColor(colors.black)
     c.setFont(fonte_principal, 10)
     
-    # Dividir o texto em linhas respeitando as quebras originais
+    # Converte para string para garantir que não haja erro de tipo
     linhas = str(texto_resultado).split('\n')
     
     for linha in linhas:
-        # Se a linha for muito longa, poderíamos quebrar, mas aqui 
-        # mantemos a simplicidade para relatórios estruturados
-        if y < 60: # Nova página automática
+        # Sistema de quebra de página automática
+        if y < 60: 
             c.showPage()
             y = altura - 50
             c.setFont(fonte_principal, 10)
+            c.setFillColor(colors.black)
 
         c.drawString(40, y, linha)
-        y -= 14 # Espaçamento entre linhas
+        y -= 15 # Espaçamento entre linhas (melhor leitura)
 
-    # 4. Rodapé Fixo
+    # 4. Rodapé Fixo (Branding MuseIA)
     c.setFont(fonte_principal, 8)
     c.setFillColor(colors.grey)
     c.drawCentredString(largura/2, 30, "Inteligência Humana que Controla a IA. | www.museiadigital.com.br")
