@@ -68,7 +68,7 @@ def exportar_resultado_pdf(texto_resultado, agente_nome):
     c.setFillColorRGB(0.02, 0.05, 0.1) # Fundo Escuro Profissional
     c.rect(0, altura - 80, largura, 80, fill=1, stroke=0)
     
-    c.setFillColor(colors.hexColor("#00FFCC")) # Verde Neon MuseIA
+    c.setFillColor(colors.HexColor("#00FFCC")) # Verde Neon MuseIA
     c.setFont(fonte_principal, 18)
     c.drawString(40, altura - 45, "MUSEIA DIGITAL")
     
