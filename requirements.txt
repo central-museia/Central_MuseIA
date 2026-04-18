@@ -11,3 +11,5 @@ python-dotenv
 python-dotenv
 mercadopago
 fpdf2
+reportlab
+pdfplumber
