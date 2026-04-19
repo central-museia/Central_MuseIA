@@ -147,31 +147,6 @@ if st.session_state.processamento_liberado:
                 st.warning("Por favor, insira um texto ou envie um arquivo.")
                 
 # =========================================
-# ✅ ENTREGA (SÓ APARECE APÓS O PROCESSAMENTO)
-# =========================================
-if st.session_state.resultado_final:
-    st.divider()
-    st.markdown("### ✅ Resultado Processado")
-    
-    resultado_texto = st.session_state.resultado_final
-    st.text_area("", resultado_texto, height=300)
-    
-    try:
-        nome_do_agente = ag.get('nome', 'Agente_MuseIA')
-        
-        pdf_bytes = exportar_resultado_pdf(resultado_texto, nome_do_agente)
-        
-        st.download_button(
-            label="📥 Clique aqui para salvar o arquivo",
-            data=pdf_bytes,
-            file_name=f"MuseIA_{nome_do_agente}.pdf",
-            mime="application/pdf",
-            use_container_width=True
-        )
-    except Exception as e:
-        st.error(f"Erro ao preparar o PDF: {e}")
-
-# =========================================
 # BOTÃO VOLTAR
 # =========================================
 st.write("") 
@@ -180,3 +155,4 @@ if st.button("⬅ Voltar para Galeria", key="btn_voltar_unico"):
     st.session_state.processamento_liberado = False
     st.session_state.resultado_final = None
     st.switch_page("pages/agentes.py")
+
