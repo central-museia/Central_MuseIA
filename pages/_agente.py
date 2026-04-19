@@ -45,7 +45,7 @@ if "processamento_liberado" not in st.session_state:
 # =========================================
 # EXIBIÇÃO DO AGENTE (DESIGN LIMPO)
 # =========================================
-col_img, col_txt = st.columns([1, 2])
+col_img, col_txt = st.columns([2, 2])
 
 with col_img:
     st.image(ag.get("url_publica") or "https://via.placeholder.com/400", use_container_width=True)
