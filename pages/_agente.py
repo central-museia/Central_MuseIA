@@ -166,39 +166,46 @@ if st.session_state.processamento_liberado:
     # =========================================
     # MODO RESULTADO
     # =========================================
+       # =========================================
+    # MODO RESULTADO
+    # =========================================
     else:
 
-    if st.session_state.executar_agora:
-        resultado = executar_agente(
-            st.session_state.input_execucao,
-            regras,
-            codigo_python
-        )
+        # 🔥 EXECUÇÃO CONTROLADA
+        if st.session_state.executar_agora:
+            resultado = executar_agente(
+                st.session_state.input_execucao,
+                regras,
+                codigo_python
+            )
 
-        st.session_state.resultado_final = resultado
-        st.session_state.executar_agora = False
+            st.session_state.resultado_final = resultado
+            st.session_state.executar_agora = False
 
-    if st.session_state.resultado_final:
-        st.success("Resultado gerado com sucesso!")
+        # ✅ EXIBIÇÃO DO RESULTADO
+        if st.session_state.resultado_final:
+            st.success("Resultado gerado com sucesso!")
 
-        st.markdown(st.session_state.resultado_final)
+            st.markdown(st.session_state.resultado_final)
 
-        pdf = exportar_resultado_pdf(st.session_state.resultado_final)
+            # 📄 PDF
+            pdf = exportar_resultado_pdf(st.session_state.resultado_final)
 
-        st.download_button(
-            label="📄 Baixar PDF",
-            data=pdf,
-            file_name=f"{ag.get('nome')}.pdf",
-            mime="application/pdf",
-            use_container_width=True
-        )
+            st.download_button(
+                label="📄 Baixar PDF",
+                data=pdf,
+                file_name=f"{ag.get('nome')}.pdf",
+                mime="application/pdf",
+                use_container_width=True
+            )
 
-    if st.button("🔄 Gerar novo resultado", use_container_width=True):
-        st.session_state.resultado_gerado = False
-        st.session_state.executar_agora = False
-        st.session_state.input_execucao = None
-        st.session_state.resultado_final = None
-        st.rerun()
+        # 🔁 RESET
+        if st.button("🔄 Gerar novo resultado", use_container_width=True):
+            st.session_state.resultado_gerado = False
+            st.session_state.executar_agora = False
+            st.session_state.input_execucao = None
+            st.session_state.resultado_final = None
+            st.rerun()
 
 # =========================================
 # BOTÃO VOLTAR
