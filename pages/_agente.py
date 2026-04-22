@@ -143,26 +143,60 @@ if not st.session_state.resultado_gerado:
     
     col_run, col_clear = st.columns([1, 1])
     
-    with col_run:
-        if st.button("🪄 Gerar Resultado Agora", use_container_width=True):
-            if dados_input or arquivo_upload:
-                with st.spinner("A MuseIA está processando sua solicitação..."):
-                    time.sleep(1)
+with col_run:
+    if st.button("🪄 Gerar Resultado Agora", use_container_width=True):
 
-                    if arquivo_upload:
-                        texto_para_processar = ler_arquivo(arquivo_upload)
-                    else:
-                        texto_para_processar = dados_input
+        if not dados_input and not arquivo_upload:
+            st.warning("Por favor, insira um texto ou envie um arquivo.")
+            st.stop()
 
-                    st.session_state.input_execucao = texto_para_processar
-                    st.session_state.executar_agora = True
-                    st.session_state.resultado_gerado = True
+        # =========================================
+        # 🔐 VALIDAÇÃO (AGORA AQUI DENTRO)
+        # =========================================
+        if not st.session_state.get("logado"):
+            st.session_state.origem = "pages/_agente.py"
+            st.warning("Faça login para gerar o resultado.")
+            time.sleep(1)
+            st.switch_page("pages/login.py")
+            st.stop()
 
-                    st.rerun()
+        user = st.session_state.get("usuario")
 
+        if user:
+            hoje = datetime.now().date()
+            data_exp_str = user.get("data_expiracao")
+
+            try:
+                expiracao = datetime.strptime(data_exp_str, '%Y-%m-%d').date() if data_exp_str else hoje
+
+                if not user.get("ativo") or hoje > expiracao:
+                    st.error("Seu acesso expirou ou não está ativo.")
+                    st.info("Redirecionando para renovação...")
+                    time.sleep(2)
+                    st.switch_page("pages/pagamento.py")
+                    st.stop()
+
+            except:
+                st.error("Erro ao validar dados. Faça login novamente.")
+                st.session_state.logado = False
+                st.stop()
+
+        # =========================================
+        # 🚀 PROCESSAMENTO (IGUAL AO SEU)
+        # =========================================
+        with st.spinner("A MuseIA está processando sua solicitação..."):
+            time.sleep(1)
+
+            if arquivo_upload:
+                texto_para_processar = ler_arquivo(arquivo_upload)
             else:
-                st.warning("Por favor, insira um texto ou envie um arquivo.")
+                texto_para_processar = dados_input
 
+            st.session_state.input_execucao = texto_para_processar
+            st.session_state.executar_agora = True
+            st.session_state.resultado_gerado = True
+
+            st.rerun()
 # =========================================
 # MODO RESULTADO (CORRETO)
 # =========================================
