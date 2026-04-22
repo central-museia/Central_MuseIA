@@ -6,23 +6,20 @@ import streamlit as st
 from datetime import datetime
 import time
 
+# ✅ P1 — CONFIGURAÇÃO CORRETA NO TOPO
+st.set_page_config(layout="wide")
+
 # Inicialização silenciosa (Obrigatória para o Streamlit não travar na largada)
 if "resultado_final" not in st.session_state:
     st.session_state.resultado_final = None
 
-def sua_funcao_do_agente(): # Procure o início da função da página
-    # 1. ESTA DEVE SER A PRIMEIRA LINHA DE CÓDIGO DENTRO DA FUNÇÃO
-  st.set_page_config(layout="wide") # ISSO AQUI É OBRIGATÓRIO
-
 st.markdown("""
     <style>
-        /* Isso aqui LIBERA a página, não engessa. Pode manter! */
         .main .block-container {
             max-width: 95% !important; 
             padding-left: 2rem !important;
             padding-right: 2rem !important;
         }
-        /* Remove o topo vazio */
         .stApp {
             margin: 0 auto;
         }
@@ -63,15 +60,13 @@ conteudo_beneficios = ag.get("beneficios")
 if conteudo_beneficios:
     st.markdown(f"### ⚡ Benefícios do {ag.get('nome')}")
 
-    # 🔥 Divide o texto pelos separadores |
-    lista_beneficios = conteudo_beneficios.split("|")
+    # ✅ P2 — SPLIT BLINDADO
+    lista_beneficios = [b.strip() for b in conteudo_beneficios.split("|") if b.strip()]
 
-    # 🔥 Exibe cada item como bullet
     for item in lista_beneficios:
-        st.markdown(f"- {item.strip()}")
+        st.markdown(f"- {item}")
 
 else:
-    # Fallback padrão MuseIA
     st.markdown("### ⚡ Benefícios")
     st.markdown("- Entrega de alta performance\n- Padrão de qualidade MuseIA")
 
@@ -122,7 +117,6 @@ if st.session_state.processamento_liberado:
     regras = ag.get('regras_processamento', {})
     codigo_python = ag.get("codigo_python")
 
-    # 🔹 Controle de estado
     if "resultado_gerado" not in st.session_state:
         st.session_state.resultado_gerado = False
 
@@ -133,7 +127,7 @@ if st.session_state.processamento_liberado:
         st.session_state.input_execucao = None
 
     # =========================================
-    # MODO INPUT (ANTES DE GERAR)
+    # MODO INPUT
     # =========================================
     if not st.session_state.resultado_gerado:
 
@@ -160,7 +154,6 @@ if st.session_state.processamento_liberado:
                         else:
                             texto_para_processar = dados_input
 
-                        # 🔥 SALVA INPUT (NÃO EXECUTA AQUI)
                         st.session_state.input_execucao = texto_para_processar
                         st.session_state.executar_agora = True
                         st.session_state.resultado_gerado = True
@@ -171,12 +164,15 @@ if st.session_state.processamento_liberado:
                     st.warning("Por favor, insira um texto ou envie um arquivo.")
 
     # =========================================
-    # MODO RESULTADO (APÓS GERAR)
+    # MODO RESULTADO
     # =========================================
     else:
-        st.success("Resultado gerado com sucesso!")
 
-        # 🔥 EXECUTA AGENTE AQUI (DEPOIS DO RERUN)
+        # ✅ P4 — SUCESSO NO MOMENTO CERTO
+        if not st.session_state.executar_agora:
+            st.success("Resultado gerado com sucesso!")
+
+        # 🔥 EXECUÇÃO CONTROLADA
         if st.session_state.executar_agora:
             executar_agente(
                 st.session_state.input_execucao,
@@ -185,7 +181,6 @@ if st.session_state.processamento_liberado:
             )
             st.session_state.executar_agora = False
 
-        # 🔁 Botão para novo processamento
         if st.button("🔄 Gerar novo resultado", use_container_width=True):
             st.session_state.resultado_gerado = False
             st.session_state.executar_agora = False
@@ -196,9 +191,9 @@ if st.session_state.processamento_liberado:
 # BOTÃO VOLTAR
 # =========================================
 st.write("") 
+
 if st.button("⬅ Voltar para Galeria", key="btn_voltar_unico"):
     st.session_state.agente_selecionado = None 
     st.session_state.processamento_liberado = False
     st.session_state.resultado_final = None
     st.switch_page("pages/agentes.py")
-
