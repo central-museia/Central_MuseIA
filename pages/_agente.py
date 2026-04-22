@@ -125,9 +125,15 @@ if st.session_state.processamento_liberado:
     if "resultado_final" not in st.session_state:
         st.session_state.resultado_final = None
 
-    arquivo_upload = st.file_uploader("📂 Envie um arquivo (PDF, CSV ou TXT)", type=["pdf", "csv", "txt"])
+    arquivo_upload = st.file_uploader(
+        "📂 Envie um arquivo (PDF, CSV ou TXT)", 
+        type=["pdf", "csv", "txt"]
+    )
     
-    dados_input = st.text_area("📋 Ou cole aqui as informações para o agente analisar:", height=200)
+    dados_input = st.text_area(
+        "📋 Ou cole aqui as informações para o agente analisar:", 
+        height=200
+    )
     
     col_run, col_clear = st.columns([1, 1])
     
@@ -137,24 +143,22 @@ if st.session_state.processamento_liberado:
                 with st.spinner("A MuseIA está processando sua solicitação..."):
                     time.sleep(1)
 
-                    # 🔹 PROCESSAMENTO REAL
+                    # 🔹 Entrada padrão MuseIA
                     if arquivo_upload:
                         texto_para_processar = ler_arquivo(arquivo_upload)
                     else:
                         texto_para_processar = dados_input
 
-                    resultado_tratado = executar_agente(
+                    # 🔥 EXECUTA O AGENTE (ELE MESMO RENDERIZA TUDO)
+                    executar_agente(
                         texto_para_processar,
                         regras,
                         codigo_python
                     )
 
-                    st.session_state.resultado_final = (
-                        f"RESULTADO DA MUSEIA\n---\n"
-                        f"Agente: {ag.get('nome')}\n"
-                        f"Data: {datetime.now().strftime('%d/%m/%Y')}\n---\n\n"
-                        f"{resultado_tratado}"
-                    )
+                    # 🔥 LIMPA RESULTADO ANTIGO (OPCIONAL)
+                    st.session_state.resultado_final = None
+
             else:
                 st.warning("Por favor, insira um texto ou envie um arquivo.")
                 
