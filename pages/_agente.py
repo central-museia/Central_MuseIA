@@ -126,100 +126,94 @@ if st.session_state.processamento_liberado:
     if "input_execucao" not in st.session_state:
         st.session_state.input_execucao = None
 
-   # =========================================
-# MODO INPUT
-# =========================================
-if not st.session_state.resultado_gerado:
+    # =========================================
+    # MODO INPUT
+    # =========================================
+    if not st.session_state.resultado_gerado:
 
-    arquivo_upload = st.file_uploader(
-        "📂 Envie um arquivo (PDF, CSV ou TXT)", 
-        type=["pdf", "csv", "txt"]
-    )
-    
-    dados_input = st.text_area(
-        "📋 Ou cole aqui as informações para o agente analisar:", 
-        height=200
-    )
-    
-    col_run, col_clear = st.columns([1, 1])
-    
-with col_run:
-    if st.button("🪄 Gerar Resultado Agora", use_container_width=True):
+        arquivo_upload = st.file_uploader(
+            "📂 Envie um arquivo (PDF, CSV ou TXT)", 
+            type=["pdf", "csv", "txt"]
+        )
+        
+        dados_input = st.text_area(
+            "📋 Ou cole aqui as informações para o agente analisar:", 
+            height=200
+        )
+        
+        col_run, col_clear = st.columns([1, 1])
+        
+        with col_run:
+            if st.button("🪄 Gerar Resultado Agora", use_container_width=True):
 
-        if not dados_input and not arquivo_upload:
-            st.warning("Por favor, insira um texto ou envie um arquivo.")
-            st.stop()
-
-        # =========================================
-        # 🔐 VALIDAÇÃO (AGORA AQUI DENTRO)
-        # =========================================
-        if not st.session_state.get("logado"):
-            st.session_state.origem = "pages/_agente.py"
-            st.warning("Faça login para gerar o resultado.")
-            time.sleep(1)
-            st.switch_page("pages/login.py")
-            st.stop()
-
-        user = st.session_state.get("usuario")
-
-        if user:
-            hoje = datetime.now().date()
-            data_exp_str = user.get("data_expiracao")
-
-            try:
-                expiracao = datetime.strptime(data_exp_str, '%Y-%m-%d').date() if data_exp_str else hoje
-
-                if not user.get("ativo") or hoje > expiracao:
-                    st.error("Seu acesso expirou ou não está ativo.")
-                    st.info("Redirecionando para renovação...")
-                    time.sleep(2)
-                    st.switch_page("pages/pagamento.py")
+                if not dados_input and not arquivo_upload:
+                    st.warning("Por favor, insira um texto ou envie um arquivo.")
                     st.stop()
 
-            except:
-                st.error("Erro ao validar dados. Faça login novamente.")
-                st.session_state.logado = False
-                st.stop()
+                # 🔐 validação
+                if not st.session_state.get("logado"):
+                    st.session_state.origem = "pages/_agente.py"
+                    st.warning("Faça login para gerar o resultado.")
+                    time.sleep(1)
+                    st.switch_page("pages/login.py")
+                    st.stop()
 
-        # =========================================
-        # 🚀 PROCESSAMENTO (IGUAL AO SEU)
-        # =========================================
-        with st.spinner("A MuseIA está processando sua solicitação..."):
-            time.sleep(1)
+                user = st.session_state.get("usuario")
 
-            if arquivo_upload:
-                texto_para_processar = ler_arquivo(arquivo_upload)
-            else:
-                texto_para_processar = dados_input
+                if user:
+                    hoje = datetime.now().date()
+                    data_exp_str = user.get("data_expiracao")
 
-            st.session_state.input_execucao = texto_para_processar
-            st.session_state.executar_agora = True
-            st.session_state.resultado_gerado = True
+                    try:
+                        expiracao = datetime.strptime(data_exp_str, '%Y-%m-%d').date() if data_exp_str else hoje
 
+                        if not user.get("ativo") or hoje > expiracao:
+                            st.error("Seu acesso expirou ou não está ativo.")
+                            st.info("Redirecionando para renovação...")
+                            time.sleep(2)
+                            st.switch_page("pages/pagamento.py")
+                            st.stop()
+
+                    except:
+                        st.error("Erro ao validar dados. Faça login novamente.")
+                        st.session_state.logado = False
+                        st.stop()
+
+                # 🚀 processamento
+                with st.spinner("A MuseIA está processando sua solicitação..."):
+                    time.sleep(1)
+
+                    if arquivo_upload:
+                        texto_para_processar = ler_arquivo(arquivo_upload)
+                    else:
+                        texto_para_processar = dados_input
+
+                    st.session_state.input_execucao = texto_para_processar
+                    st.session_state.executar_agora = True
+                    st.session_state.resultado_gerado = True
+
+                    st.rerun()
+
+    # =========================================
+    # MODO RESULTADO
+    # =========================================
+    else:
+
+        if st.session_state.executar_agora:
+            executar_agente(
+                st.session_state.input_execucao,
+                regras,
+                codigo_python
+            )
+            st.session_state.executar_agora = False
+
+            st.success("Resultado gerado com sucesso!")
+
+        if st.button("🔄 Gerar novo resultado", use_container_width=True):
+            st.session_state.resultado_gerado = False
+            st.session_state.executar_agora = False
+            st.session_state.input_execucao = None
             st.rerun()
-# =========================================
-# MODO RESULTADO (CORRETO)
-# =========================================
-else:
-
-    # 🔥 EXECUTA AGENTE SOMENTE QUANDO PRECISA
-    if st.session_state.executar_agora:
-        executar_agente(
-            st.session_state.input_execucao,
-            regras,
-            codigo_python
-        )
-        st.session_state.executar_agora = False
-
-        # ✅ Só mostra sucesso depois da execução real
-        st.success("Resultado gerado com sucesso!")
-
-    # 🔁 Botão correto (só aparece depois)
-    if st.button("🔄 Gerar novo resultado", use_container_width=True):
-        st.session_state.resultado_gerado = False
-        st.session_state.executar_agora = False
-        st.session_state.input_execucao = None
-        st.rerun()
 # =========================================
 # BOTÃO VOLTAR
 # =========================================
