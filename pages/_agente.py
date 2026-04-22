@@ -122,46 +122,62 @@ if st.session_state.processamento_liberado:
     regras = ag.get('regras_processamento', {})
     codigo_python = ag.get("codigo_python")
 
-    if "resultado_final" not in st.session_state:
-        st.session_state.resultado_final = None
+    # 🔹 Controle de estado
+    if "resultado_gerado" not in st.session_state:
+        st.session_state.resultado_gerado = False
 
-    arquivo_upload = st.file_uploader(
-        "📂 Envie um arquivo (PDF, CSV ou TXT)", 
-        type=["pdf", "csv", "txt"]
-    )
-    
-    dados_input = st.text_area(
-        "📋 Ou cole aqui as informações para o agente analisar:", 
-        height=200
-    )
-    
-    col_run, col_clear = st.columns([1, 1])
-    
-    with col_run:
-        if st.button("🪄 Gerar Resultado Agora", use_container_width=True):
-            if dados_input or arquivo_upload:
-                with st.spinner("A MuseIA está processando sua solicitação..."):
-                    time.sleep(1)
+    # =========================================
+    # MODO INPUT (ANTES DE GERAR)
+    # =========================================
+    if not st.session_state.resultado_gerado:
 
-                    # 🔹 Entrada padrão MuseIA
-                    if arquivo_upload:
-                        texto_para_processar = ler_arquivo(arquivo_upload)
-                    else:
-                        texto_para_processar = dados_input
+        arquivo_upload = st.file_uploader(
+            "📂 Envie um arquivo (PDF, CSV ou TXT)", 
+            type=["pdf", "csv", "txt"]
+        )
+        
+        dados_input = st.text_area(
+            "📋 Ou cole aqui as informações para o agente analisar:", 
+            height=200
+        )
+        
+        col_run, col_clear = st.columns([1, 1])
+        
+        with col_run:
+            if st.button("🪄 Gerar Resultado Agora", use_container_width=True):
+                if dados_input or arquivo_upload:
+                    with st.spinner("A MuseIA está processando sua solicitação..."):
+                        time.sleep(1)
 
-                    # 🔥 EXECUTA O AGENTE (ELE MESMO RENDERIZA TUDO)
-                    executar_agente(
-                        texto_para_processar,
-                        regras,
-                        codigo_python
-                    )
+                        if arquivo_upload:
+                            texto_para_processar = ler_arquivo(arquivo_upload)
+                        else:
+                            texto_para_processar = dados_input
 
-                    # 🔥 LIMPA RESULTADO ANTIGO (OPCIONAL)
-                    st.session_state.resultado_final = None
+                        executar_agente(
+                            texto_para_processar,
+                            regras,
+                            codigo_python
+                        )
 
-            else:
-                st.warning("Por favor, insira um texto ou envie um arquivo.")
-                
+                        # 🔥 Ativa modo resultado
+                        st.session_state.resultado_gerado = True
+                        st.rerun()
+
+                else:
+                    st.warning("Por favor, insira um texto ou envie um arquivo.")
+
+    # =========================================
+    # MODO RESULTADO (APÓS GERAR)
+    # =========================================
+    else:
+        st.success("Resultado gerado com sucesso!")
+
+        # 🔁 Botão para novo processamento
+        if st.button("🔄 Gerar novo resultado", use_container_width=True):
+            st.session_state.resultado_gerado = False
+            st.rerun()
+            
 # =========================================
 # BOTÃO VOLTAR
 # =========================================
