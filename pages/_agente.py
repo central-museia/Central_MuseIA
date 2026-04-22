@@ -126,47 +126,47 @@ if st.session_state.processamento_liberado:
     if "input_execucao" not in st.session_state:
         st.session_state.input_execucao = None
 
-    # =========================================
-    # MODO INPUT
-    # =========================================
-    if not st.session_state.resultado_gerado:
+   # =========================================
+# MODO INPUT
+# =========================================
+if not st.session_state.resultado_gerado:
 
-        arquivo_upload = st.file_uploader(
-            "📂 Envie um arquivo (PDF, CSV ou TXT)", 
-            type=["pdf", "csv", "txt"]
-        )
-        
-        dados_input = st.text_area(
-            "📋 Ou cole aqui as informações para o agente analisar:", 
-            height=200
-        )
-        
-        col_run, col_clear = st.columns([1, 1])
-        
-        with col_run:
-            if st.button("🪄 Gerar Resultado Agora", use_container_width=True):
-                if dados_input or arquivo_upload:
-                    with st.spinner("A MuseIA está processando sua solicitação..."):
-                        time.sleep(1)
+    arquivo_upload = st.file_uploader(
+        "📂 Envie um arquivo (PDF, CSV ou TXT)", 
+        type=["pdf", "csv", "txt"]
+    )
+    
+    dados_input = st.text_area(
+        "📋 Ou cole aqui as informações para o agente analisar:", 
+        height=200
+    )
+    
+    col_run, col_clear = st.columns([1, 1])
+    
+    with col_run:
+        if st.button("🪄 Gerar Resultado Agora", use_container_width=True):
+            if dados_input or arquivo_upload:
+                with st.spinner("A MuseIA está processando sua solicitação..."):
+                    time.sleep(1)
 
-                        if arquivo_upload:
-                            texto_para_processar = ler_arquivo(arquivo_upload)
-                        else:
-                            texto_para_processar = dados_input
+                    if arquivo_upload:
+                        texto_para_processar = ler_arquivo(arquivo_upload)
+                    else:
+                        texto_para_processar = dados_input
 
-                        st.session_state.input_execucao = texto_para_processar
-                        st.session_state.executar_agora = True
-                        st.session_state.resultado_gerado = True
+                    st.session_state.input_execucao = texto_para_processar
+                    st.session_state.executar_agora = True
+                    st.session_state.resultado_gerado = True
 
-                        st.rerun()
+                    st.rerun()
 
-                else:
-                    st.warning("Por favor, insira um texto ou envie um arquivo.")
+            else:
+                st.warning("Por favor, insira um texto ou envie um arquivo.")
 
-    # =========================================
-    # MODO RESULTADO
-    # =========================================
-elif st.session_state.resultado_gerado:
+# =========================================
+# MODO RESULTADO (CORRETO)
+# =========================================
+else:
 
     # 🔥 EXECUTA AGENTE SOMENTE QUANDO PRECISA
     if st.session_state.executar_agora:
@@ -180,7 +180,7 @@ elif st.session_state.resultado_gerado:
         # ✅ Só mostra sucesso depois da execução real
         st.success("Resultado gerado com sucesso!")
 
-    # 🔁 Botão para novo processamento (SEU PADRÃO MANTIDO)
+    # 🔁 Botão correto (só aparece depois)
     if st.button("🔄 Gerar novo resultado", use_container_width=True):
         st.session_state.resultado_gerado = False
         st.session_state.executar_agora = False
