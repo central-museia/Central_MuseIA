@@ -54,14 +54,19 @@ with col_txt:
     st.title(ag.get("nome"))
     st.write(ag.get("descricao"))
 
-st.markdown("### ⚡ Benefícios")
-st.markdown("""
-- Economiza tempo real na sua operação
-- Automatiza tarefas repetitivas
-- Reduz erros humanos e aumenta a produtividade
-""")
+# =========================================
+# EXIBIÇÃO DINÂMICA DE BENEFÍCIOS (BANCO DE DADOS)
+# =========================================
+# Puxa o conteúdo da coluna 'beneficios' da tabela agentes
+conteudo_beneficios = ag.get("beneficios")
 
-st.divider()
+if conteudo_beneficios:
+    st.markdown(f"### ⚡ Benefícios do {ag.get('nome')}")
+    st.markdown(conteudo_beneficios)
+else:
+    # Fallback caso a coluna no banco esteja vazia, mantendo o padrão MuseIA
+    st.markdown("### ⚡ Benefícios")
+    st.markdown("- Entrega de alta performance\n- Padrão de qualidade MuseIA")
 
 # =========================================
 # BOTÃO DE AÇÃO (LÓGICA DE ACESSO)
