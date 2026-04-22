@@ -57,14 +57,21 @@ with col_txt:
 # =========================================
 # EXIBIÇÃO DINÂMICA DE BENEFÍCIOS (BANCO DE DADOS)
 # =========================================
-# Puxa o conteúdo da coluna 'beneficios' da tabela agentes
+
 conteudo_beneficios = ag.get("beneficios")
 
 if conteudo_beneficios:
     st.markdown(f"### ⚡ Benefícios do {ag.get('nome')}")
-    st.markdown(conteudo_beneficios)
+
+    # 🔥 Divide o texto pelos separadores |
+    lista_beneficios = conteudo_beneficios.split("|")
+
+    # 🔥 Exibe cada item como bullet
+    for item in lista_beneficios:
+        st.markdown(f"- {item.strip()}")
+
 else:
-    # Fallback caso a coluna no banco esteja vazia, mantendo o padrão MuseIA
+    # Fallback padrão MuseIA
     st.markdown("### ⚡ Benefícios")
     st.markdown("- Entrega de alta performance\n- Padrão de qualidade MuseIA")
 
