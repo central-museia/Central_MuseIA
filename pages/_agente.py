@@ -71,11 +71,12 @@ else:
     st.markdown("- Entrega de alta performance\n- Padrão de qualidade MuseIA")
 
 # =========================================
-# BOTÃO DE AÇÃO (LÓGICA DE ACESSO)
+# BOTÃO DE AÇÃO (APENAS LIBERA INTERFACE)
 # =========================================
-
-if not st.session_state.get("processamento_liberado"):
+if not st.session_state.processamento_liberado:
     if st.button("🚀 Usar este agente", use_container_width=True, key=f"btn_usar_{ag.get('id')}"):
+        st.session_state.processamento_liberado = True
+        st.rerun()
 
 # =========================================
 # ÁREA DE TRABALHO (APARECE APÓS VALIDAÇÃO)
