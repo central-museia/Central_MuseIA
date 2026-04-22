@@ -76,37 +76,6 @@ else:
 
 if not st.session_state.get("processamento_liberado"):
     if st.button("🚀 Usar este agente", use_container_width=True, key=f"btn_usar_{ag.get('id')}"):
-        
-        if not st.session_state.get("logado"):
-            st.session_state.origem = "pages/_agente.py"
-            st.warning("Identificamos que você não está logada. Redirecionando...")
-            time.sleep(1)
-            st.switch_page("pages/login.py")
-            st.stop()
-
-        user = st.session_state.get("usuario")
-        
-        if user:
-            hoje = datetime.now().date()
-            data_exp_str = user.get("data_expiracao")
-            
-            try:
-                expiracao = datetime.strptime(data_exp_str, '%Y-%m-%d').date() if data_exp_str else hoje
-                
-                if not user.get("ativo") or hoje > expiracao:
-                    st.error("Seu acesso expirou ou não está ativo.")
-                    st.info("Redirecionando para a página de renovação...")
-                    time.sleep(2)
-                    st.switch_page("pages/pagamento.py")
-                    st.stop()
-                
-                else:
-                    st.success(f"Acesso liberado! Bem-vinda.")
-                    st.session_state.processamento_liberado = True
-                    
-            except Exception as e:
-                st.error("Erro ao validar dados. Por favor, faça login novamente.")
-                st.session_state.logado = False
 
 # =========================================
 # ÁREA DE TRABALHO (APARECE APÓS VALIDAÇÃO)
