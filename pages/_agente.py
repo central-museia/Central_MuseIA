@@ -126,6 +126,12 @@ if st.session_state.processamento_liberado:
     if "resultado_gerado" not in st.session_state:
         st.session_state.resultado_gerado = False
 
+    if "executar_agora" not in st.session_state:
+        st.session_state.executar_agora = False
+
+    if "input_execucao" not in st.session_state:
+        st.session_state.input_execucao = None
+
     # =========================================
     # MODO INPUT (ANTES DE GERAR)
     # =========================================
@@ -154,14 +160,11 @@ if st.session_state.processamento_liberado:
                         else:
                             texto_para_processar = dados_input
 
-                        executar_agente(
-                            texto_para_processar,
-                            regras,
-                            codigo_python
-                        )
-
-                        # 🔥 Ativa modo resultado
+                        # 🔥 SALVA INPUT (NÃO EXECUTA AQUI)
+                        st.session_state.input_execucao = texto_para_processar
+                        st.session_state.executar_agora = True
                         st.session_state.resultado_gerado = True
+
                         st.rerun()
 
                 else:
@@ -173,11 +176,22 @@ if st.session_state.processamento_liberado:
     else:
         st.success("Resultado gerado com sucesso!")
 
+        # 🔥 EXECUTA AGENTE AQUI (DEPOIS DO RERUN)
+        if st.session_state.executar_agora:
+            executar_agente(
+                st.session_state.input_execucao,
+                regras,
+                codigo_python
+            )
+            st.session_state.executar_agora = False
+
         # 🔁 Botão para novo processamento
         if st.button("🔄 Gerar novo resultado", use_container_width=True):
             st.session_state.resultado_gerado = False
+            st.session_state.executar_agora = False
+            st.session_state.input_execucao = None
             st.rerun()
-            
+
 # =========================================
 # BOTÃO VOLTAR
 # =========================================
