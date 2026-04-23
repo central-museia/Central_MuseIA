@@ -77,6 +77,15 @@ if filtro_colecao != "Todos":
 
 fallback_logo = "https://lmlfeizxwnhqebotfzsm.supabase.co/storage/v1/object/public/museia-assets/identidade_visual/logo_coringa.webp"
 
+import requests
+
+def imagem_valida(url):
+    try:
+        r = requests.head(url, timeout=2)
+        return r.status_code == 200
+    except:
+        return False
+
 if not agentes_filtrados:
     st.info("Nenhum agente encontrado para os filtros selecionados.")
 else:
@@ -96,14 +105,19 @@ else:
             """, unsafe_allow_html=True)
 
             # 🔹 IMAGEM FLEXÍVEL SEGURA
-            url_img = ag.get("url_publica") or fallback_logo
+url_img = ag.get("url_publica")
 
-            st.markdown(
-                "<div style='height:180px; display:flex; align-items:center; justify-content:center;'>",
-                unsafe_allow_html=True
-            )
-            st.image(url_img, use_container_width=True)
-            st.markdown("</div>", unsafe_allow_html=True)
+st.markdown(
+    "<div style='height:180px; display:flex; align-items:center; justify-content:center;'>",
+    unsafe_allow_html=True
+)
+
+if url_img and imagem_valida(url_img):
+    st.image(url_img, use_container_width=True)
+else:
+    st.image(fallback_logo, use_container_width=True)
+
+st.markdown("</div>", unsafe_allow_html=True)
 
             # 🔹 TEXTO
             st.markdown(f"**{ag.get('nome')}**")
