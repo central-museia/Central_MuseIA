@@ -6,6 +6,34 @@ import time
 from database.catalogo import obter_agentes, obter_perfis, obter_colecoes
 from database.cliente import validar_login
 
+# ... seus imports ...
+
+# 1. DEFINIÇÃO DAS PÁGINAS (O segredo está aqui)
+# Criamos um dicionário para renomear e organizar o menu
+paginas = [
+    st.Page("Home.py", title="MuseIA", icon="🏠"),
+    st.Page("pages/agentes.py", title="Agentes", icon="🤖"),
+    st.Page("pages/login.py", title="Login", icon="🔑"),
+    st.Page("pages/pagamento.py", title="Pagamento", icon="💳"),
+    st.Page("pages/redefinir.py", title="Mudar minha senha", icon="🛡️"),
+    # Note que NÃO incluímos a página "_agente.py" aqui. 
+    # Assim, ela fica "oculta" do menu lateral, mas acessível via switch_page.
+]
+
+# 2. CONFIGURAÇÃO DA NAVEGAÇÃO
+pg = st.navigation(paginas)
+
+# 3. CONFIG DA PÁGINA (Título e Layout)
+# O st.set_page_config deve ser mantido, mas o título agora pode vir do st.Page
+st.set_page_config(
+    page_title="MuseIA Digital", 
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
+
+# 4. EXECUÇÃO DA PÁGINA SELECIONADA
+pg.run()
+
 # 1. PATH E CONFIG (Sempre no topo)
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 if BASE_DIR not in sys.path:
