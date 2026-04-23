@@ -85,15 +85,23 @@ else:
     for i, ag in enumerate(agentes_filtrados):
         with cols[i % 3]:
 
-            st.markdown("""
-            <div style="
-                background-color: #111;
-                padding: 15px;
-                border-radius: 12px;
-                text-align: center;
-                height: 100%;
-            ">
-            """, unsafe_allow_html=True)
+url_img = ag.get("url_publica") or fallback_logo
+
+st.markdown(f"""
+<div style="
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+">
+    <img src="{url_img}" style="
+        max-height: 100%;
+        max-width: 100%;
+        object-fit: contain;
+    ">
+</div>
+""", unsafe_allow_html=True)
 
             # 🔹 IMAGEM (sem request → mais leve)
             url_img = ag.get("url_publica") or fallback_logo
