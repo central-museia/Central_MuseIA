@@ -95,27 +95,18 @@ else:
             ">
             """, unsafe_allow_html=True)
 
-            # 🔹 IMAGEM FLEXÍVEL (SEM QUEBRAR COM QUALQUER FORMATO)
+            # 🔹 IMAGEM FLEXÍVEL SEGURA
             url_img = ag.get("url_publica") or fallback_logo
 
-            st.markdown(f"""
-                <div style="
-                    height: 180px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    overflow: hidden;
-                ">
-                    <img src="{url_img}" style="
-                        max-height: 100%;
-                        max-width: 100%;
-                        object-fit: contain;
-                    ">
-                </div>
-            """, unsafe_allow_html=True)
+            st.markdown(
+                "<div style='height:180px; display:flex; align-items:center; justify-content:center;'>",
+                unsafe_allow_html=True
+            )
+            st.image(url_img, use_container_width=True)
+            st.markdown("</div>", unsafe_allow_html=True)
 
             # 🔹 TEXTO
-            st.markdown(f"<h4 style='margin-bottom:5px'>{ag.get('nome')}</h4>", unsafe_allow_html=True)
+            st.markdown(f"**{ag.get('nome')}**")
             st.caption(f"ID: {ag.get('codigo', 'S/C')}")
 
             # 🔹 BOTÃO
@@ -123,4 +114,4 @@ else:
                 st.session_state.agente_selecionado = ag
                 st.switch_page("pages/_agente.py")
 
-            st.markdown("</div>", unsafe_allow_html=True)down("</div>", unsafe_allow_html=True)
+            st.markdown("</div>", unsafe_allow_html=True)
