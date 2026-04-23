@@ -74,39 +74,40 @@ if filtro_colecao != "Todos":
 # =========================================
 # 5. EXIBIÇÃO DA VITRINE
 # =========================================
-import requests
-
-def imagem_valida(url):
-    try:
-        r = requests.get(url, timeout=2)
-        return r.status_code == 200
-    except:
-        return False
 
 fallback_logo = "https://lmlfeizxwnhqebotfzsm.supabase.co/storage/v1/object/public/museia-assets/identidade_visual/logo_coringa.webp"
 
 if not agentes_filtrados:
     st.info("Nenhum agente encontrado para os filtros selecionados.")
 else:
-    # Grid de 3 colunas
     cols = st.columns(3)
 
     for i, ag in enumerate(agentes_filtrados):
         with cols[i % 3]:
 
-            # 🔹 IMAGEM COM FALLBACK
-            url_img = ag.get("url_publica")
+            st.markdown("""
+            <div style="
+                background-color: #111;
+                padding: 15px;
+                border-radius: 12px;
+                text-align: center;
+                height: 100%;
+            ">
+            """, unsafe_allow_html=True)
 
-            if url_img and imagem_valida(url_img):
-                st.image(url_img, width=180)
-            else:
-                st.image(fallback_logo, width=180)
+            # 🔹 IMAGEM (sem request → mais leve)
+            url_img = ag.get("url_publica") or fallback_logo
+            st.image(url_img, width=160)
 
-            # 🔹 TÍTULO E CÓDIGO
-            st.markdown(f"**{ag.get('nome')}**")
+            # 🔹 NOME
+            st.markdown(f"<h4 style='margin-bottom:5px'>{ag.get('nome')}</h4>", unsafe_allow_html=True)
+
+            # 🔹 ID
             st.caption(f"ID: {ag.get('codigo', 'S/C')}")
 
             # 🔹 BOTÃO
             if st.button("Acessar", key=f"ag_{ag.get('id')}", use_container_width=True):
                 st.session_state.agente_selecionado = ag
                 st.switch_page("pages/_agente.py")
+
+            st.markdown("</div>", unsafe_allow_html=True)
