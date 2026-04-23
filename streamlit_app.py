@@ -194,6 +194,11 @@ def minha_home():
 # =========================================
 # 3. NAVEGAÇÃO
 # =========================================
+
+# Criamos a definição da página de detalhes, mas NÃO a colocamos no dicionário abaixo.
+# Isso faz com que ela exista para o sistema, mas fique invisível no menu lateral.
+pag_detalhes = st.Page("pages/_agente.py", title="Detalhes")
+
 pg = st.navigation({
     "Principal": [
         st.Page(minha_home, title="MuseIA", icon="🏠"),
