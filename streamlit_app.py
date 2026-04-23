@@ -9,7 +9,7 @@ import streamlit as st
 import streamlit as st
 # ... todos os seus outros imports (os que você já tinha) ...
 
-# 1. CONFIGURAÇÃO (Obrigatório ser a primeira coisa)
+# 1. CONFIGURAÇÃO (Sempre a primeira coisa)
 st.set_page_config(
     page_title="MuseIA Digital", 
     layout="wide",
@@ -18,18 +18,34 @@ st.set_page_config(
 
 # 2. A FUNÇÃO QUE "ISOLA" A SUA HOME
 def mostrar_home():
-    # --- TUDO O QUE ERA A SUA PÁGINA PRINCIPAL ENTRA AQUI ---
-    # Coloque aqui: Imports internos, Session State, CSS, Hero, Vitrine e FAQ.
-    # Exemplo:
-    st.image("https://lmlfeizxwnhqebotfzsm.supabase.co/storage/v1/object/public/museia-assets/identidade_visual/logo_coringa.webp", width=80)
-    st.markdown('<div class="hero"><h1>Automatize o que te trava</h1></div>', unsafe_allow_html=True)
-    # ... todo o resto do seu código ...
-    # -------------------------------------------------------
+    # -------------------------------------------------------------------------
+    # TUDO O QUE ESTAVA "SOLTO" NO SEU ARQUIVO ORIGINAL ENTRA AQUI DENTRO
+    # -------------------------------------------------------------------------
+    
+    # 2.1 SESSION (Inicialização)
+    for key, val in {
+        "logado": False, "usuario": {}, "mostrar_auth": False,
+        "agente_selecionado": None, "filtro_perfil": None, "filtro_colecao": None
+    }.items():
+        if key not in st.session_state:
+            st.session_state[key] = val
 
-# 3. O MAPA DO MENU (Aqui você define os nomes amigáveis)
+    # 2.2 CSS, CARREGAMENTO, HEADER, HERO, FILTROS, VITRINE...
+    # (Mova TODO o código que você me mandou na primeira mensagem para cá)
+    
+    st.markdown("<style>...</style>", unsafe_allow_html=True)
+    
+    # ... (todo o seu código original: Header, Hero, Busca, Perfis, FAQ, etc.) ...
+    
+    st.caption("MuseIA@2026 - Brasil 🇧🇷")
+    # -------------------------------------------------------------------------
+    # FIM DA FUNÇÃO MOSTRAR_HOME
+    # -------------------------------------------------------------------------
+
+# 3. O MAPA DO MENU
 pg = st.navigation({
     "Principal": [
-        st.Page(mostrar_home, title="MuseIA", icon="🏠"), # Aqui a Home ganha o nome MuseIA
+        st.Page(mostrar_home, title="MuseIA", icon="🏠"),
         st.Page("pages/agentes.py", title="Agentes", icon="🤖"),
     ],
     "Minha Conta": [
@@ -39,8 +55,7 @@ pg = st.navigation({
     ]
 })
 
-# 4. O COMANDO ÚNICO DE EXECUÇÃO
-# Ele limpa a tela e desenha APENAS o que foi selecionado no menu.
+# 4. O COMANDO FINAL (NADA PODE EXISTIR ABAIXO DESTA LINHA)
 pg.run()
 
 # 2. SESSION (Inicialização garantida)
