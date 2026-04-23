@@ -44,7 +44,7 @@ if "processamento_liberado" not in st.session_state:
 # =========================================
 import requests
 
-col_img, col_txt = st.columns([2, 2])
+col_img, col_txt = st.columns([1, 3])  # imagem menor, texto maior
 
 BASE_URL = "https://lmlfeizxwnhqebotfzsm.supabase.co/storage/v1/object/public/museia-assets/"
 
@@ -65,7 +65,7 @@ fallback_logo = BASE_URL + "identidade_visual/logo_coringa.webp"
 
 with col_img:
     if url_img and imagem_valida(url_img):
-        st.image(url_img, use_container_width=True)
+        st.image(url_img, width=250)
     else:
         st.image(fallback_logo, use_container_width=True)
 
