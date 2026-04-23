@@ -42,10 +42,32 @@ if "processamento_liberado" not in st.session_state:
 # =========================================
 # EXIBIÇÃO DO AGENTE (DESIGN LIMPO)
 # =========================================
+import requests
+
 col_img, col_txt = st.columns([2, 2])
 
+BASE_URL = "https://lmlfeizxwnhqebotfzsm.supabase.co/storage/v1/object/public/museia-assets/"
+
+def imagem_valida(url):
+    try:
+        r = requests.get(url, timeout=3)
+        return r.status_code == 200
+    except:
+        return False
+
+url_img = ag.get("url_publica")
+
+# 🔧 Monta URL se vier só o path
+if url_img and not url_img.startswith("http"):
+    url_img = BASE_URL + url_img
+
+fallback_logo = BASE_URL + "identidade_visual/logo_coringa.webp"
+
 with col_img:
-    st.image(ag.get("url_publica") or "https://via.placeholder.com/400", use_container_width=True)
+    if url_img and imagem_valida(url_img):
+        st.image(url_img, use_container_width=True)
+    else:
+        st.image(fallback_logo, use_container_width=True)
 
 with col_txt:
     st.title(ag.get("nome"))
