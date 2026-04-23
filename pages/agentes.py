@@ -88,21 +88,23 @@ else:
             # 🔥 Define TOP agentes (exemplo)
             top = ag.get("execucoes", 0) > 10
 
+            # 🔥 CARD (CORRIGIDO)
+            st.markdown(f"""
             <div style="
-            background: #111;
-            padding: 12px;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-            text-align: center;
+                background: #111;
+                padding: 12px;
+                border-radius: 12px;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+                text-align: center;
 
-            height: 260px;              /* 👈 AQUI controla o tamanho do card */
-            display: flex;              /* 👇 organiza conteúdo interno */
-            flex-direction: column;
-            justify-content: space-between;
-            ">
-            " onmouseover="this.style.transform='scale(1.03)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.6)';"
-               onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.4)';"
+                height: 260px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            "
+            onmouseover="this.style.transform='scale(1.03)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.6)';"
+            onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.4)';"
             >
             """, unsafe_allow_html=True)
 
@@ -116,11 +118,10 @@ else:
                     padding:3px 8px;
                     border-radius:6px;
                     font-size:12px;
-                    margin-bottom:5px;
                 ">🔥 TOP</div>
                 """, unsafe_allow_html=True)
 
-            # 🔥 IMAGEM COM PROPORÇÃO 4:5 (tipo Netflix)
+            # 🔥 IMAGEM
             url_img = ag.get("url_publica") or fallback_logo
 
             st.markdown("""
@@ -141,7 +142,10 @@ else:
             st.markdown("</div>", unsafe_allow_html=True)
 
             # 🔹 TEXTO
-            st.markdown(f"<div style='margin-top:10px; font-weight:600;'>{ag.get('nome')}</div>", unsafe_allow_html=True)
+            st.markdown(
+                f"<div style='margin-top:10px; font-weight:600;'>{ag.get('nome')}</div>",
+                unsafe_allow_html=True
+            )
             st.caption(f"ID: {ag.get('codigo', 'S/C')}")
 
             # 🔹 BOTÃO
@@ -149,4 +153,5 @@ else:
                 st.session_state.agente_selecionado = ag
                 st.switch_page("pages/_agente.py")
 
+            # 🔚 FECHA CARD
             st.markdown("</div>", unsafe_allow_html=True)
