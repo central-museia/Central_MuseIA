@@ -88,14 +88,19 @@ else:
             # 🔥 Define TOP agentes (exemplo)
             top = ag.get("execucoes", 0) > 10
 
-            st.markdown(f"""
             <div style="
-                background: #111;
-                padding: 12px;
-                border-radius: 12px;
-                transition: all 0.3s ease;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-                text-align: center;
+            background: #111;
+            padding: 12px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            text-align: center;
+
+            height: 260px;              /* 👈 AQUI controla o tamanho do card */
+            display: flex;              /* 👇 organiza conteúdo interno */
+            flex-direction: column;
+            justify-content: space-between;
+            ">
             " onmouseover="this.style.transform='scale(1.03)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.6)';"
                onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.4)';"
             >
