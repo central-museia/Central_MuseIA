@@ -85,32 +85,37 @@ else:
     for i, ag in enumerate(agentes_filtrados):
         with cols[i % 3]:
 
-url_img = ag.get("url_publica") or fallback_logo
+            st.markdown("""
+            <div style="
+                background-color: #111;
+                padding: 15px;
+                border-radius: 12px;
+                text-align: center;
+                height: 100%;
+            ">
+            """, unsafe_allow_html=True)
 
-st.markdown(f"""
-<div style="
-    height: 180px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-">
-    <img src="{url_img}" style="
-        max-height: 100%;
-        max-width: 100%;
-        object-fit: contain;
-    ">
-</div>
-""", unsafe_allow_html=True)
-
-            # 🔹 IMAGEM (sem request → mais leve)
+            # 🔹 IMAGEM FLEXÍVEL (SEM QUEBRAR COM QUALQUER FORMATO)
             url_img = ag.get("url_publica") or fallback_logo
-            st.image(url_img, width=160)
 
-            # 🔹 NOME
+            st.markdown(f"""
+                <div style="
+                    height: 180px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    overflow: hidden;
+                ">
+                    <img src="{url_img}" style="
+                        max-height: 100%;
+                        max-width: 100%;
+                        object-fit: contain;
+                    ">
+                </div>
+            """, unsafe_allow_html=True)
+
+            # 🔹 TEXTO
             st.markdown(f"<h4 style='margin-bottom:5px'>{ag.get('nome')}</h4>", unsafe_allow_html=True)
-
-            # 🔹 ID
             st.caption(f"ID: {ag.get('codigo', 'S/C')}")
 
             # 🔹 BOTÃO
@@ -118,4 +123,4 @@ st.markdown(f"""
                 st.session_state.agente_selecionado = ag
                 st.switch_page("pages/_agente.py")
 
-            st.markdown("</div>", unsafe_allow_html=True)
+            st.markdown("</div>", unsafe_allow_html=True)down("</div>", unsafe_allow_html=True)
