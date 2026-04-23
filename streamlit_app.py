@@ -7,55 +7,28 @@ from database.catalogo import obter_agentes, obter_perfis, obter_colecoes
 from database.cliente import validar_login
 import streamlit as st
 import streamlit as st
-# ... todos os seus outros imports (os que você já tinha) ...
 
-# 1. CONFIGURAÇÃO (Sempre a primeira coisa)
-st.set_page_config(
-    page_title="MuseIA Digital", 
-    layout="wide",
-    initial_sidebar_state="collapsed"
-)
-
-# 2. A FUNÇÃO QUE "ISOLA" A SUA HOME
-def mostrar_home():
-    # -------------------------------------------------------------------------
-    # TUDO O QUE ESTAVA "SOLTO" NO SEU ARQUIVO ORIGINAL ENTRA AQUI DENTRO
-    # -------------------------------------------------------------------------
-    
-    # 2.1 SESSION (Inicialização)
-    for key, val in {
-        "logado": False, "usuario": {}, "mostrar_auth": False,
-        "agente_selecionado": None, "filtro_perfil": None, "filtro_colecao": None
-    }.items():
-        if key not in st.session_state:
-            st.session_state[key] = val
-
-    # 2.2 CSS, CARREGAMENTO, HEADER, HERO, FILTROS, VITRINE...
-    # (Mova TODO o código que você me mandou na primeira mensagem para cá)
-    
-    st.markdown("<style>...</style>", unsafe_allow_html=True)
-    
-    # ... (todo o seu código original: Header, Hero, Busca, Perfis, FAQ, etc.) ...
-    
-    st.caption("MuseIA@2026 - Brasil 🇧🇷")
-    # -------------------------------------------------------------------------
-    # FIM DA FUNÇÃO MOSTRAR_HOME
-    # -------------------------------------------------------------------------
-
-# 3. O MAPA DO MENU
-pg = st.navigation({
-    "Principal": [
-        st.Page(mostrar_home, title="MuseIA", icon="🏠"),
+# 1. DEFINIÇÃO DAS PÁGINAS (Ajustado para os seus arquivos reais)
+try:
+    paginas = [
+        # O primeiro item é o arquivo onde você está agora (streamlit_app.py)
+        st.Page("streamlit_app.py", title="MuseIA", icon="🏠"),
+        
+        # Ajuste os caminhos abaixo conforme a sua estrutura de pastas:
         st.Page("pages/agentes.py", title="Agentes", icon="🤖"),
-    ],
-    "Minha Conta": [
         st.Page("pages/login.py", title="Login", icon="🔑"),
         st.Page("pages/pagamento.py", title="Pagamento", icon="💳"),
-        st.Page("pages/redefinir.py", title="Mudar minha senha", icon="🛡️"),
+        st.Page("pages/redefinir.py", title="Mudar minha senha", icon="🛡️")
     ]
-})
+    
+    # Configuração da Navegação
+    pg = st.navigation(paginas)
+    
+except Exception as e:
+    st.error(f"Erro ao configurar navegação: Verifique se os nomes dos arquivos na pasta /pages estão corretos.")
+    st.stop()
 
-# 4. O COMANDO FINAL (NADA PODE EXISTIR ABAIXO DESTA LINHA)
+# 2. EXECUÇÃO DA PÁGINA (Isso deve vir antes de qualquer conteúdo visual)
 pg.run()
 
 # 2. SESSION (Inicialização garantida)
