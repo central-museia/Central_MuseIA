@@ -6,6 +6,7 @@ import time
 from database.catalogo import obter_agentes, obter_perfis, obter_colecoes
 from database.cliente import validar_login
 import streamlit as st
+import streamlit as st
 # ... todos os seus outros imports (os que você já tinha) ...
 
 # 1. CONFIGURAÇÃO (Sempre a primeira coisa)
@@ -36,18 +37,6 @@ paginas = [
 # 3. EXECUÇÃO DA NAVEGAÇÃO
 pg = st.navigation(paginas)
 pg.run()
-
-# 1. PATH E CONFIG (Sempre no topo)
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-if BASE_DIR not in sys.path:
-    sys.path.insert(0, BASE_DIR)
-
-# A configuração correta que não quebra o site:
-st.set_page_config(
-    page_title="MuseIA Digital", 
-    layout="wide",
-    initial_sidebar_state="collapsed"
-)
 
 # 2. SESSION (Inicialização garantida)
 for key, val in {
