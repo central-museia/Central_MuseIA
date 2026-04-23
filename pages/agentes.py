@@ -75,17 +75,15 @@ if filtro_colecao != "Todos":
 # 5. VITRINE ESTILO NETFLIX COM LOGO MUSEIA
 # =========================================
 
-# URL da sua logo oficial (Coringa/Fallback)
 fallback_logo = "https://lmlfeizxwnhqebotfzsm.supabase.co/storage/v1/object/public/museia-assets/identidade_visual/logo_coringa.webp"
 
-# Estilização para garantir que a Logo não fique esticada
 st.markdown("""
     <style>
     [data-testid="stImage"] img {
         border-radius: 12px;
         object-fit: cover;
         height: 140px !important; 
-        border: 1px solid #1e1e1e; /* Borda sutil para dar profundidade */
+        border: 1px solid #1e1e1e;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -96,13 +94,12 @@ else:
     num_colunas = 5 
     cols = st.columns(num_colunas)
 
-for i, ag in enumerate(agentes_filtrados):
+    # AQUI ESTAVA O ERRO: O FOR PRECISA ESTAR ALINHADO DENTRO DO ELSE
+    for i, ag in enumerate(agentes_filtrados):
         with cols[i % num_colunas]:
             
-            # 🔹 BUSCA MULTI-CAMADA (Caso o nome da coluna tenha mudado no banco)
-            # Tenta buscar em 'url_publica' ou 'imagem_url' ou 'avatar'
+            # Busca a URL no banco ou usa a logo da MuseIA
             url_raw = ag.get("url_publica") or ag.get("imagem_url") or ag.get("avatar")
-            
             url_aux = str(url_raw).strip() if url_raw else ""
 
             if not url_raw or url_aux.lower() in ["none", "nan", "", "null"]:
@@ -110,17 +107,13 @@ for i, ag in enumerate(agentes_filtrados):
             else:
                 img_exibir = url_raw
             
-            # 🔹 FORÇAR RENDERIZAÇÃO
-            # Às vezes o Streamlit se perde com URLs externas, o catch resolve
+            # Tenta renderizar a imagem
             try:
-                if img_exibir:
-                    st.image(img_exibir, use_container_width=True)
-                else:
-                    st.image(fallback_logo, use_container_width=True)
+                st.image(img_exibir, use_container_width=True)
             except Exception:
                 st.image(fallback_logo, use_container_width=True)
 
-            # 🔹 TÍTULO E BOTÃO
+            # Título e Botão
             nome_agente = ag.get('nome', 'Agente sem nome')
             st.markdown(f"<p style='font-size: 13px; font-weight: 600; margin-top: 5px; color: #f0f0f0;'>{nome_agente}</p>", unsafe_allow_html=True)
             
