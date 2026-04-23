@@ -192,26 +192,36 @@ def minha_home():
 
 
 # =========================================
-# 3. NAVEGAÇÃO
+# 3. DEFINIÇÃO DAS PÁGINAS (FORA DA NAVEGAÇÃO)
 # =========================================
 
-# Criamos a definição da página de detalhes, mas NÃO a colocamos no dicionário abaixo.
-# Isso faz com que ela exista para o sistema, mas fique invisível no menu lateral.
-pag_detalhes = st.Page("pages/_agente.py", title="Detalhes")
+# Criamos as variáveis das páginas. 
+# A 'pag_detalhes' NÃO será colocada no dicionário do menu lateral.
+pag_home = st.Page(minha_home, title="MuseIA", icon="🏠", default=True)
+pag_agentes = st.Page("pages/agentes.py", title="Agentes", icon="🤖")
+pag_login = st.Page("pages/login.py", title="Login", icon="🔑")
+pag_pagamento = st.Page("pages/pagamento.py", title="Pagamento", icon="💳")
+pag_redefinir = st.Page("pages/redefinir.py", title="Mudar minha senha", icon="🛡️")
 
+# ESSA É A PÁGINA "INVISÍVEL"
+pag_detalhes = st.Page("pages/_agente.py", title="Detalhes") 
+
+# =========================================
+# 4. MAPEAMENTO DO MENU (SÓ O QUE DEVE APARECER)
+# =========================================
 pg = st.navigation({
     "Principal": [
-        st.Page(minha_home, title="MuseIA", icon="🏠"),
-        st.Page("pages/agentes.py", title="Agentes", icon="🤖"),
+        pag_home, 
+        pag_agentes
     ],
     "Minha Conta": [
-        st.Page("pages/login.py", title="Login", icon="🔑"),
-        st.Page("pages/pagamento.py", title="Pagamento", icon="💳"),
-        st.Page("pages/redefinir.py", title="Mudar minha senha", icon="🛡️"),
+        pag_login,
+        pag_pagamento,
+        pag_redefinir
     ]
 })
 
 # =========================================
-# 4. EXECUÇÃO
+# 5. EXECUÇÃO
 # =========================================
 pg.run()
