@@ -1,5 +1,6 @@
 import streamlit as st
 from database.catalogo import obter_agentes, obter_perfis, obter_colecoes
+import requests
 
 def normalizar(texto):
     if not texto: return ""
@@ -95,25 +96,34 @@ else:
     cols = st.columns(num_colunas)
 
     # AQUI ESTAVA O ERRO: O FOR PRECISA ESTAR ALINHADO DENTRO DO ELSE
-    for i, ag in enumerate(agentes_filtrados):
+for i, ag in enumerate(agentes_filtrados):
         with cols[i % num_colunas]:
             
-            # Busca a URL no banco ou usa a logo da MuseIA
-            url_raw = ag.get("url_publica") or ag.get("imagem_url") or ag.get("avatar")
-            url_aux = str(url_raw).strip() if url_raw else ""
-
-            if not url_raw or url_aux.lower() in ["none", "nan", "", "null"]:
-                img_exibir = fallback_logo
-            else:
-                img_exibir = url_raw
+            # 1. Pega a URL que o banco gerou (ou planos B e C)
+            url_gerada = ag.get("url_publica") or ag.get("imagem_url") or ag.get("avatar")
             
-            # Tenta renderizar a imagem
-            try:
-                st.image(img_exibir, use_container_width=True)
-            except Exception:
-                st.image(fallback_logo, use_container_width=True)
+            # 2. Função interna para checar se a imagem existe de verdade no Storage
+            def validar_link(url):
+                if not url or str(url).lower() in ["none", "nan", "", "null"]:
+                    return False
+                try:
+                    # O 'timeout' evita que seu site fique lento se o storage demorar
+                    # O 'head' apenas checa se o arquivo existe sem baixar a imagem inteira
+                    check = requests.head(url, timeout=0.8)
+                    return check.status_code == 200
+                except:
+                    return False
 
-            # Título e Botão
+            # 3. A DECISÃO: Se o link não for real/válido, usa a logo MuseIA
+            if validar_link(url_gerada):
+                img_exibir = url_gerada
+            else:
+                img_exibir = fallback_logo
+
+            # 4. Renderização Final
+            st.image(img_exibir, use_container_width=True)
+
+            # Título e Botão (mantenha como estava)
             nome_agente = ag.get('nome', 'Agente sem nome')
             st.markdown(f"<p style='font-size: 13px; font-weight: 600; margin-top: 5px; color: #f0f0f0;'>{nome_agente}</p>", unsafe_allow_html=True)
             
