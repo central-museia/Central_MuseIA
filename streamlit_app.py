@@ -5,36 +5,37 @@ import unicodedata
 import time
 from database.catalogo import obter_agentes, obter_perfis, obter_colecoes
 from database.cliente import validar_login
+import streamlit as st
+# ... todos os seus outros imports (os que você já tinha) ...
 
-# 1. DEFINIÇÃO DAS PÁGINAS (Ajustado para os seus arquivos reais)
-try:
-    paginas = [
-        # O primeiro item é o arquivo onde você está agora (streamlit_app.py)
-        st.Page("streamlit_app.py", title="MuseIA", icon="🏠"),
-        
-        # Ajuste os caminhos abaixo conforme a sua estrutura de pastas:
-        st.Page("pages/agentes.py", title="Agentes", icon="🤖"),
-        st.Page("pages/login.py", title="Login", icon="🔑"),
-        st.Page("pages/pagamento.py", title="Pagamento", icon="💳"),
-        st.Page("pages/redefinir.py", title="Mudar minha senha", icon="🛡️")
-    ]
-    
-    # Configuração da Navegação
-    pg = st.navigation(paginas)
-    
-except Exception as e:
-    st.error(f"Erro ao configurar navegação: Verifique se os nomes dos arquivos na pasta /pages estão corretos.")
-    st.stop()
-
-# 2. EXECUÇÃO DA PÁGINA (Isso deve vir antes de qualquer conteúdo visual)
-pg.run()
-
-# 3. CONFIG DA PÁGINA
+# 1. CONFIGURAÇÃO (Sempre a primeira coisa)
 st.set_page_config(
     page_title="MuseIA Digital", 
     layout="wide",
     initial_sidebar_state="collapsed"
 )
+
+# 2. DEFINIÇÃO DAS PÁGINAS DO MENU
+# Criamos a função para a Home para ela não se perder no loop
+def mostrar_home():
+    # --- TODO O SEU CÓDIGO DA HOME VAI AQUI ---
+    # (Header, Hero, Busca, Perfis, Coleções, FAQ)
+    # Copie e cole aqui todo o conteúdo que você me mandou antes
+    st.markdown('<div class="hero">...</div>', unsafe_allow_html=True) 
+    # ... etc ...
+
+# Criamos a lista de navegação
+paginas = [
+    st.Page(mostrar_home, title="MuseIA", icon="🏠"),
+    st.Page("pages/agentes.py", title="Agentes", icon="🤖"),
+    st.Page("pages/login.py", title="Login", icon="🔑"),
+    st.Page("pages/pagamento.py", title="Pagamento", icon="💳"),
+    st.Page("pages/redefinir.py", title="Mudar minha senha", icon="🛡️")
+]
+
+# 3. EXECUÇÃO DA NAVEGAÇÃO
+pg = st.navigation(paginas)
+pg.run()
 
 # 1. PATH E CONFIG (Sempre no topo)
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
