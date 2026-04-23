@@ -71,23 +71,42 @@ if filtro_colecao != "Todos":
         )
     ]
 
+# =========================================
 # 5. EXIBIÇÃO DA VITRINE
+# =========================================
+import requests
+
+def imagem_valida(url):
+    try:
+        r = requests.get(url, timeout=2)
+        return r.status_code == 200
+    except:
+        return False
+
+fallback_logo = "https://lmlfeizxwnhqebotfzsm.supabase.co/storage/v1/object/public/museia-assets/identidade_visual/logo_coringa.webp"
+
 if not agentes_filtrados:
     st.info("Nenhum agente encontrado para os filtros selecionados.")
 else:
     # Grid de 3 colunas
     cols = st.columns(3)
+
     for i, ag in enumerate(agentes_filtrados):
         with cols[i % 3]:
-            # Imagem com Fallback
-            img = ag.get("url_publica") or "https://via.placeholder.com/150"
-            st.image(img, use_container_width=True)
-            
-            # Título e Código (O código P-..., C-... que geramos no banco)
+
+            # 🔹 IMAGEM COM FALLBACK
+            url_img = ag.get("url_publica")
+
+            if url_img and imagem_valida(url_img):
+                st.image(url_img, width=180)
+            else:
+                st.image(fallback_logo, width=180)
+
+            # 🔹 TÍTULO E CÓDIGO
             st.markdown(f"**{ag.get('nome')}**")
             st.caption(f"ID: {ag.get('codigo', 'S/C')}")
-            
+
+            # 🔹 BOTÃO
             if st.button("Acessar", key=f"ag_{ag.get('id')}", use_container_width=True):
                 st.session_state.agente_selecionado = ag
-                # Certifique-se que o arquivo existe como _agente.py ou agente.py
                 st.switch_page("pages/_agente.py")
