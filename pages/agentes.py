@@ -72,7 +72,7 @@ if filtro_colecao != "Todos":
     ]
 
 # =========================================
-# 5. EXIBIÇÃO DA VITRINE (PADRÃO NETFLIX)
+# 5. EXIBIÇÃO DA VITRINE (VERSÃO ORIGINAL ESTÁVEL)
 # =========================================
 
 fallback_logo = "https://lmlfeizxwnhqebotfzsm.supabase.co/storage/v1/object/public/museia-assets/identidade_visual/logo_coringa.webp"
@@ -85,73 +85,19 @@ else:
     for i, ag in enumerate(agentes_filtrados):
         with cols[i % 3]:
 
-            # 🔥 Define TOP agentes (exemplo)
-            top = ag.get("execucoes", 0) > 10
+            # 🔹 IMAGEM COM FALLBACK
+            url_img = ag.get("url_publica")
 
-            # 🔥 CARD (CORRIGIDO)
-            st.markdown(f"""
-            <div style="
-                background: #111;
-                padding: 12px;
-                border-radius: 12px;
-                transition: all 0.3s ease;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-                text-align: center;
-
-                height: 260px;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-            "
-            onmouseover="this.style.transform='scale(1.03)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.6)';"
-            onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.4)';"
-            >
-            """, unsafe_allow_html=True)
-
-            # 🔥 Badge TOP
-            if top:
-                st.markdown("""
-                <div style="
-                    position:absolute;
-                    background:#ff4b4b;
-                    color:white;
-                    padding:3px 8px;
-                    border-radius:6px;
-                    font-size:12px;
-                ">🔥 TOP</div>
-                """, unsafe_allow_html=True)
-
-            # 🔥 IMAGEM
-            url_img = ag.get("url_publica") or fallback_logo
-
-            st.markdown("""
-            <div style="
-                width:100%;
-                aspect-ratio:4/5;
-                overflow:hidden;
-                border-radius:8px;
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                background:#000;
-            ">
-            """, unsafe_allow_html=True)
-
-            st.image(url_img, use_container_width=True)
-
-            st.markdown("</div>", unsafe_allow_html=True)
+            if url_img:
+                st.image(url_img, use_container_width=True)
+            else:
+                st.image(fallback_logo, use_container_width=True)
 
             # 🔹 TEXTO
-            st.markdown(
-                f"<div style='margin-top:10px; font-weight:600;'>{ag.get('nome')}</div>",
-                unsafe_allow_html=True
-            )
+            st.markdown(f"**{ag.get('nome')}**")
             st.caption(f"ID: {ag.get('codigo', 'S/C')}")
 
             # 🔹 BOTÃO
             if st.button("Acessar", key=f"ag_{ag.get('id')}", use_container_width=True):
                 st.session_state.agente_selecionado = ag
                 st.switch_page("pages/_agente.py")
-
-            # 🔚 FECHA CARD
-            st.markdown("</div>", unsafe_allow_html=True)
