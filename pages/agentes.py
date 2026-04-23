@@ -99,22 +99,28 @@ else:
     for i, ag in enumerate(agentes_filtrados):
         with cols[i % num_colunas]:
             
-            # 🔹 LÓGICA DE IMAGEM: Se 'url_publica' for nula ou vazia, usa a Logo MuseIA
-            url_img = ag.get("url_publica")
+          # 🔹 LÓGICA DE IMAGEM BLINDADA (Trata inconsistências do banco)
+            url_raw = ag.get("url_publica")
             
-            # Validação profissional: verifica se a URL existe e não é apenas um espaço
-            if url_img and str(url_img).strip():
-                img_exibir = url_img
-            else:
-                img_exibir = "https://lmlfeizxwnhqebotfzsm.supabase.co/storage/v1/object/public/museia-assets/identidade_visual/logo_coringa.webp"
-            
-            # Renderização da Capa do Agente
-            st.image(img_exibir, use_container_width=True)
+            # 1. Normalização: Transforma em texto e remove espaços
+            url_aux = str(url_raw).strip() if url_raw else ""
 
-            # 🔹 TÍTULO DO AGENTE (Abaixo da imagem)
+            # 2. Validação: Se for nulo, vazio ou termos de erro comuns do banco
+            if not url_raw or url_aux.lower() in ["none", "nan", "", "null"]:
+                img_exibir = "https://lmlfeizxwnhqebotfzsm.supabase.co/storage/v1/object/public/museia-assets/identidade_visual/logo_coringa.webp"
+            else:
+                img_exibir = url_raw
+            
+            # 3. Renderização com fallback de segurança (caso o link esteja quebrado)
+            try:
+                st.image(img_exibir, use_container_width=True)
+            except:
+                st.image("https://lmlfeizxwnhqebotfzsm.supabase.co/storage/v1/object/public/museia-assets/identidade_visual/logo_coringa.webp", use_container_width=True)
+
+            # 🔹 TÍTULO DO AGENTE
             st.markdown(f"<p style='font-size: 13px; font-weight: 600; margin-top: 5px; color: #f0f0f0;'>{ag.get('nome')}</p>", unsafe_allow_html=True)
             
-            # 🔹 BOTÃO DE ACESSO (O gatilho para a página _agente.py)
+            # 🔹 BOTÃO DE ACESSO
             if st.button("Abrir", key=f"ag_{ag.get('id')}", use_container_width=True):
                 st.session_state.agente_selecionado = ag
                 st.switch_page("pages/_agente.py")
