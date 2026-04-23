@@ -96,31 +96,34 @@ else:
     num_colunas = 5 
     cols = st.columns(num_colunas)
 
-    for i, ag in enumerate(agentes_filtrados):
+for i, ag in enumerate(agentes_filtrados):
         with cols[i % num_colunas]:
             
-          # 🔹 LÓGICA DE IMAGEM BLINDADA (Trata inconsistências do banco)
-            url_raw = ag.get("url_publica")
+            # 🔹 BUSCA MULTI-CAMADA (Caso o nome da coluna tenha mudado no banco)
+            # Tenta buscar em 'url_publica' ou 'imagem_url' ou 'avatar'
+            url_raw = ag.get("url_publica") or ag.get("imagem_url") or ag.get("avatar")
             
-            # 1. Normalização: Transforma em texto e remove espaços
             url_aux = str(url_raw).strip() if url_raw else ""
 
-            # 2. Validação: Se for nulo, vazio ou termos de erro comuns do banco
             if not url_raw or url_aux.lower() in ["none", "nan", "", "null"]:
-                img_exibir = "https://lmlfeizxwnhqebotfzsm.supabase.co/storage/v1/object/public/museia-assets/identidade_visual/logo_coringa.webp"
+                img_exibir = fallback_logo
             else:
                 img_exibir = url_raw
             
-            # 3. Renderização com fallback de segurança (caso o link esteja quebrado)
+            # 🔹 FORÇAR RENDERIZAÇÃO
+            # Às vezes o Streamlit se perde com URLs externas, o catch resolve
             try:
-                st.image(img_exibir, use_container_width=True)
-            except:
-                st.image("https://lmlfeizxwnhqebotfzsm.supabase.co/storage/v1/object/public/museia-assets/identidade_visual/logo_coringa.webp", use_container_width=True)
+                if img_exibir:
+                    st.image(img_exibir, use_container_width=True)
+                else:
+                    st.image(fallback_logo, use_container_width=True)
+            except Exception:
+                st.image(fallback_logo, use_container_width=True)
 
-            # 🔹 TÍTULO DO AGENTE
-            st.markdown(f"<p style='font-size: 13px; font-weight: 600; margin-top: 5px; color: #f0f0f0;'>{ag.get('nome')}</p>", unsafe_allow_html=True)
+            # 🔹 TÍTULO E BOTÃO
+            nome_agente = ag.get('nome', 'Agente sem nome')
+            st.markdown(f"<p style='font-size: 13px; font-weight: 600; margin-top: 5px; color: #f0f0f0;'>{nome_agente}</p>", unsafe_allow_html=True)
             
-            # 🔹 BOTÃO DE ACESSO
-            if st.button("Abrir", key=f"ag_{ag.get('id')}", use_container_width=True):
+            if st.button("Abrir", key=f"ag_{ag.get('id', i)}", use_container_width=True):
                 st.session_state.agente_selecionado = ag
                 st.switch_page("pages/_agente.py")
