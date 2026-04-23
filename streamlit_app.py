@@ -120,7 +120,7 @@ if busca:
     resultados = [a for a in agentes_db if busca.lower() in (a.get("nome") or "").lower()]
     if resultados:
         st.session_state.agente_selecionado = resultados[0]
-        st.switch_page("pages/agente.py")
+        st.switch_page("pages/agentes.py")
 
 # RESET DE FILTROS
 if st.session_state.get("reset_filtros"):
