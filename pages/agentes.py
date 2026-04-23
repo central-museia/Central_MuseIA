@@ -72,32 +72,44 @@ if filtro_colecao != "Todos":
     ]
 
 # =========================================
-# 5. EXIBIÇÃO DA VITRINE (VERSÃO ORIGINAL ESTÁVEL)
+# 5. EXIBIÇÃO DA VITRINE (ESTILO NETFLIX)
 # =========================================
 
 fallback_logo = "https://lmlfeizxwnhqebotfzsm.supabase.co/storage/v1/object/public/museia-assets/identidade_visual/logo_coringa.webp"
 
+# CSS para forçar o tamanho das imagens e arredondar bordas como na Netflix
+st.markdown("""
+    <style>
+    [data-testid="stImage"] img {
+        border-radius: 8px;
+        object-fit: cover;
+        height: 150px !important; /* Altura fixa para manter o padrão */
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 if not agentes_filtrados:
     st.info("Nenhum agente encontrado para os filtros selecionados.")
 else:
-    cols = st.columns(3)
+    # Aumentamos para 5 ou 6 colunas para os cards ficarem pequenos
+    num_colunas = 5 
+    cols = st.columns(num_colunas)
 
     for i, ag in enumerate(agentes_filtrados):
-        with cols[i % 3]:
-
+        with cols[i % num_colunas]:
+            
             # 🔹 IMAGEM COM FALLBACK
             url_img = ag.get("url_publica")
+            img_exibir = url_img if url_img else fallback_logo
+            
+            # Renderiza a imagem
+            st.image(img_exibir, use_container_width=True)
 
-            if url_img:
-                st.image(url_img, use_container_width=True)
-            else:
-                st.image(fallback_logo, use_container_width=True)
+            # 🔹 TEXTO COMPACTO (Estilo legenda de filme)
+            st.markdown(f"<p style='font-size: 14px; font-weight: bold; margin-bottom: 0px;'>{ag.get('nome')}</p>", unsafe_allow_html=True)
+            st.caption(f"Cod: {ag.get('codigo', 'S/C')}")
 
-            # 🔹 TEXTO
-            st.markdown(f"**{ag.get('nome')}**")
-            st.caption(f"ID: {ag.get('codigo', 'S/C')}")
-
-            # 🔹 BOTÃO
+            # 🔹 BOTÃO DISCRETO
             if st.button("Acessar", key=f"ag_{ag.get('id')}", use_container_width=True):
                 st.session_state.agente_selecionado = ag
                 st.switch_page("pages/_agente.py")
