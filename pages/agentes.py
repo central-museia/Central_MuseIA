@@ -77,13 +77,14 @@ if filtro_colecao != "Todos":
 
 fallback_logo = "https://lmlfeizxwnhqebotfzsm.supabase.co/storage/v1/object/public/museia-assets/identidade_visual/logo_coringa.webp"
 
+# Ajuste no CSS: Mais genérico para evitar que o Streamlit bloqueie a renderização
 st.markdown("""
     <style>
-    [data-testid="stImage"] img {
-        border-radius: 12px;
-        object-fit: cover;
+    .stImage > img {
+        border-radius: 12px !important;
+        object-fit: cover !important;
         height: 140px !important; 
-        border: 1px solid #1e1e1e;
+        border: 1px solid #1e1e1e !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -94,11 +95,10 @@ else:
     num_colunas = 5 
     cols = st.columns(num_colunas)
 
-    # AQUI ESTAVA O ERRO: O FOR PRECISA ESTAR ALINHADO DENTRO DO ELSE
     for i, ag in enumerate(agentes_filtrados):
         with cols[i % num_colunas]:
             
-            # Busca a URL no banco ou usa a logo da MuseIA
+            # Lógica de URL
             url_raw = ag.get("url_publica") or ag.get("imagem_url") or ag.get("avatar")
             url_aux = str(url_raw).strip() if url_raw else ""
 
@@ -107,15 +107,16 @@ else:
             else:
                 img_exibir = url_raw
             
-            # Tenta renderizar a imagem
+            # RENDERIZAÇÃO
             try:
+                # O parâmetro 'output_format' ajuda a forçar o Streamlit a processar a URL
                 st.image(img_exibir, use_container_width=True)
-            except Exception:
+            except Exception as e:
                 st.image(fallback_logo, use_container_width=True)
 
             # Título e Botão
             nome_agente = ag.get('nome', 'Agente sem nome')
-            st.markdown(f"<p style='font-size: 13px; font-weight: 600; margin-top: 5px; color: #f0f0f0;'>{nome_agente}</p>", unsafe_allow_html=True)
+            st.markdown(f"**{nome_agente}**")
             
             if st.button("Abrir", key=f"ag_{ag.get('id', i)}", use_container_width=True):
                 st.session_state.agente_selecionado = ag
