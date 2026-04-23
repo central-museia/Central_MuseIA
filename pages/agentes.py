@@ -106,7 +106,7 @@ else:
             if url_img and str(url_img).strip():
                 img_exibir = url_img
             else:
-                img_exibir = fallback_logo
+                img_exibir = "https://lmlfeizxwnhqebotfzsm.supabase.co/storage/v1/object/public/museia-assets/identidade_visual/logo_coringa.webp"
             
             # Renderização da Capa do Agente
             st.image(img_exibir, use_container_width=True)
