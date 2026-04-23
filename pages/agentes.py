@@ -104,20 +104,20 @@ else:
             ">
             """, unsafe_allow_html=True)
 
-            # 🔹 IMAGEM FLEXÍVEL SEGURA
-url_img = ag.get("url_publica")
+            # 🔹 IMAGEM (AGORA CORRETAMENTE DENTRO DO BLOCO)
+            url_img = ag.get("url_publica")
 
-st.markdown(
-    "<div style='height:180px; display:flex; align-items:center; justify-content:center;'>",
-    unsafe_allow_html=True
-)
+            st.markdown(
+                "<div style='height:180px; display:flex; align-items:center; justify-content:center;'>",
+                unsafe_allow_html=True
+            )
 
-if url_img and imagem_valida(url_img):
-    st.image(url_img, use_container_width=True)
-else:
-    st.image(fallback_logo, use_container_width=True)
+            if url_img and imagem_valida(url_img):
+                st.image(url_img, use_container_width=True)
+            else:
+                st.image(fallback_logo, use_container_width=True)
 
-st.markdown("</div>", unsafe_allow_html=True)
+            st.markdown("</div>", unsafe_allow_html=True)
 
             # 🔹 TEXTO
             st.markdown(f"**{ag.get('nome')}**")
