@@ -108,7 +108,7 @@ else:
             url_img = ag.get("url_publica")
 
             st.markdown(
-                "<div style='height:110px; display:flex; align-items:center; justify-content:center;'>",
+                "<div style='height:50px; display:flex; align-items:center; justify-content:center;'>",
                 unsafe_allow_html=True
             )
 
