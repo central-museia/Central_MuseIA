@@ -44,7 +44,7 @@ if "processamento_liberado" not in st.session_state:
 # =========================================
 import requests
 
-col_img, col_txt = st.columns([1, 3])  # imagem menor, texto maior
+col_img, col_txt = st.columns([2, 2])  # imagem menor, texto maior
 
 BASE_URL = "https://lmlfeizxwnhqebotfzsm.supabase.co/storage/v1/object/public/museia-assets/"
 
