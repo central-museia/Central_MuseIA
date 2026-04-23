@@ -34,6 +34,10 @@ paginas = [
     st.Page("pages/redefinir.py", title="Mudar minha senha", icon="🛡️")
 ]
 
+# 3. EXECUÇÃO DA NAVEGAÇÃO
+pg = st.navigation(paginas)
+pg.run()
+
 # 2. SESSION (Inicialização garantida)
 for key, val in {
     "logado": False,
