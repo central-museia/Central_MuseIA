@@ -72,44 +72,49 @@ if filtro_colecao != "Todos":
     ]
 
 # =========================================
-# 5. EXIBIÇÃO DA VITRINE (ESTILO NETFLIX)
+# 5. VITRINE ESTILO NETFLIX COM LOGO MUSEIA
 # =========================================
 
+# URL da sua logo oficial (Coringa/Fallback)
 fallback_logo = "https://lmlfeizxwnhqebotfzsm.supabase.co/storage/v1/object/public/museia-assets/identidade_visual/logo_coringa.webp"
 
-# CSS para forçar o tamanho das imagens e arredondar bordas como na Netflix
+# Estilização para garantir que a Logo não fique esticada
 st.markdown("""
     <style>
     [data-testid="stImage"] img {
-        border-radius: 8px;
+        border-radius: 12px;
         object-fit: cover;
-        height: 150px !important; /* Altura fixa para manter o padrão */
+        height: 140px !important; 
+        border: 1px solid #1e1e1e; /* Borda sutil para dar profundidade */
     }
     </style>
 """, unsafe_allow_html=True)
 
 if not agentes_filtrados:
-    st.info("Nenhum agente encontrado para os filtros selecionados.")
+    st.info("Nenhum agente encontrado.")
 else:
-    # Aumentamos para 5 ou 6 colunas para os cards ficarem pequenos
     num_colunas = 5 
     cols = st.columns(num_colunas)
 
     for i, ag in enumerate(agentes_filtrados):
         with cols[i % num_colunas]:
             
-            # 🔹 IMAGEM COM FALLBACK
+            # 🔹 LÓGICA DE IMAGEM: Se 'url_publica' for nula ou vazia, usa a Logo MuseIA
             url_img = ag.get("url_publica")
-            img_exibir = url_img if url_img else fallback_logo
             
-            # Renderiza a imagem
+            # Validação profissional: verifica se a URL existe e não é apenas um espaço
+            if url_img and str(url_img).strip():
+                img_exibir = url_img
+            else:
+                img_exibir = fallback_logo
+            
+            # Renderização da Capa do Agente
             st.image(img_exibir, use_container_width=True)
 
-            # 🔹 TEXTO COMPACTO (Estilo legenda de filme)
-            st.markdown(f"<p style='font-size: 14px; font-weight: bold; margin-bottom: 0px;'>{ag.get('nome')}</p>", unsafe_allow_html=True)
-            st.caption(f"Cod: {ag.get('codigo', 'S/C')}")
-
-            # 🔹 BOTÃO DISCRETO
-            if st.button("Acessar", key=f"ag_{ag.get('id')}", use_container_width=True):
+            # 🔹 TÍTULO DO AGENTE (Abaixo da imagem)
+            st.markdown(f"<p style='font-size: 13px; font-weight: 600; margin-top: 5px; color: #f0f0f0;'>{ag.get('nome')}</p>", unsafe_allow_html=True)
+            
+            # 🔹 BOTÃO DE ACESSO (O gatilho para a página _agente.py)
+            if st.button("Abrir", key=f"ag_{ag.get('id')}", use_container_width=True):
                 st.session_state.agente_selecionado = ag
                 st.switch_page("pages/_agente.py")
