@@ -5,11 +5,12 @@ from utils.pdf import ler_arquivo
 import streamlit as st
 from datetime import datetime
 import time
+import requests
 
 # ✅ P1 — CONFIGURAÇÃO CORRETA NO TOPO
 st.set_page_config(layout="wide")
 
-# Inicialização silenciosa (Obrigatória para o Streamlit não travar na largada)
+# Inicialização silenciosa
 if "resultado_final" not in st.session_state:
     st.session_state.resultado_final = None
 if "input_provisorio" not in st.session_state:
@@ -44,8 +45,6 @@ if "processamento_liberado" not in st.session_state:
 # =========================================
 # EXIBIÇÃO DO AGENTE (DESIGN LIMPO)
 # =========================================
-import requests
-
 col_img, col_txt = st.columns([1, 2])  # imagem menor, texto maior
 
 BASE_URL = "https://lmlfeizxwnhqebotfzsm.supabase.co/storage/v1/object/public/museia-assets/"
@@ -59,7 +58,6 @@ def imagem_valida(url):
 
 url_img = ag.get("url_publica")
 
-# 🔧 Monta URL se vier só o path
 if url_img and not url_img.startswith("http"):
     url_img = BASE_URL + url_img
 
@@ -76,26 +74,21 @@ with col_txt:
     st.write(ag.get("descricao"))
 
 # =========================================
-# EXIBIÇÃO DINÂMICA DE BENEFÍCIOS (BANCO DE DADOS)
+# EXIBIÇÃO DINÂMICA DE BENEFÍCIOS
 # =========================================
-
 conteudo_beneficios = ag.get("beneficios")
 
 if conteudo_beneficios:
     st.markdown(f"### ⚡ Benefícios do {ag.get('nome')}")
-
-    # ✅ P2 — SPLIT BLINDADO
     lista_beneficios = [b.strip() for b in conteudo_beneficios.split("|") if b.strip()]
-
     for item in lista_beneficios:
         st.markdown(f"- {item}")
-
 else:
     st.markdown("### ⚡ Benefícios")
     st.markdown("- Entrega de alta performance\n- Padrão de qualidade MuseIA")
 
 # =========================================
-# BOTÃO DE AÇÃO (APENAS LIBERA INTERFACE)
+# BOTÃO DE AÇÃO
 # =========================================
 if not st.session_state.processamento_liberado:
     if st.button("🚀 Usar este agente", use_container_width=True, key=f"btn_usar_{ag.get('id')}"):
@@ -103,7 +96,7 @@ if not st.session_state.processamento_liberado:
         st.rerun()
 
 # =========================================
-# ÁREA DE TRABALHO (APARECE APÓS VALIDAÇÃO)
+# ÁREA DE TRABALHO
 # =========================================
 if st.session_state.processamento_liberado:
     st.info(f"Você está usando o robô: **{ag.get('nome')}**")
@@ -113,10 +106,8 @@ if st.session_state.processamento_liberado:
 
     if "resultado_gerado" not in st.session_state:
         st.session_state.resultado_gerado = False
-
     if "executar_agora" not in st.session_state:
         st.session_state.executar_agora = False
-
     if "input_execucao" not in st.session_state:
         st.session_state.input_execucao = None
 
@@ -124,15 +115,15 @@ if st.session_state.processamento_liberado:
     # MODO INPUT
     # =========================================
     if not st.session_state.resultado_gerado:
-
         arquivo_upload = st.file_uploader(
             "📂 Envie um arquivo (PDF, CSV ou TXT)", 
             type=["pdf", "csv", "txt"]
         )
         
-       dados_input = st.text_area(
+        # Corrigido o alinhamento aqui:
+        dados_input = st.text_area(
             "📋 Ou cole aqui as informações...", 
-            value=st.session_state.input_provisorio, # <--- ADICIONE ESTA LINHA
+            value=st.session_state.input_provisorio,
             height=200
         )
         
@@ -146,7 +137,6 @@ if st.session_state.processamento_liberado:
                     st.warning("Por favor, insira um texto ou envie um arquivo.")
                     st.stop()
 
-                # 🔐 validação
                 if not st.session_state.get("logado"):
                     st.session_state.origem = "pages/_agente.py"
                     st.warning("Faça login para gerar o resultado.")
@@ -155,71 +145,52 @@ if st.session_state.processamento_liberado:
                     st.stop()
 
                 user = st.session_state.get("usuario")
-
                 if user:
                     hoje = datetime.now().date()
                     data_exp_str = user.get("data_expiracao")
-
                     try:
                         expiracao = datetime.strptime(data_exp_str, '%Y-%m-%d').date() if data_exp_str else hoje
-
                         if not user.get("ativo") or hoje > expiracao:
-                            st.error("Seu acesso expirou ou não está ativo.")
-                            st.info("Redirecionando para renovação...")
-                            time.sleep(2)
+                            st.error("Seu acesso expirou.")
                             st.switch_page("pages/pagamento.py")
                             st.stop()
-
                     except:
-                        st.error("Erro ao validar dados. Faça login novamente.")
-                        st.session_state.logado = False
+                        st.error("Erro na validação.")
                         st.stop()
 
-                # 🚀 processamento
-                with st.spinner("A MuseIA está processando sua solicitação..."):
+                with st.spinner("Processando..."):
                     time.sleep(1)
-
-                    if arquivo_upload:
-                        texto_para_processar = ler_arquivo(arquivo_upload)
-                    else:
-                        texto_para_processar = dados_input
-
+                    texto_para_processar = ler_arquivo(arquivo_upload) if arquivo_upload else dados_input
                     st.session_state.input_execucao = texto_para_processar
                     st.session_state.executar_agora = True
                     st.session_state.resultado_gerado = True
-
+                    st.session_state.input_provisorio = ""
                     st.rerun()
 
     # =========================================
     # MODO RESULTADO
     # =========================================
     else:
-
         if st.session_state.executar_agora:
-            executar_agente(
-                st.session_state.input_execucao,
-                regras,
-                codigo_python
-            )
+            executar_agente(st.session_state.input_execucao, regras, codigo_python)
             st.session_state.executar_agora = False
-
-            st.success("Resultado gerado com sucesso!")
+            st.success("Resultado gerado!")
 
         if st.button("🔄 Gerar novo resultado", use_container_width=True):
             st.session_state.resultado_gerado = False
             st.session_state.executar_agora = False
-            st.session_state.input_execucao = None
             st.rerun()
+
 # =========================================
 # BOTÃO VOLTAR
 # =========================================
 st.write("") 
 
 if st.button("⬅ Voltar para Galeria", key="btn_voltar_unico"):
-    # ✅ LIMPEZA TOTAL PARA NÃO TRAVAR O PRÓXIMO AGENTE
+    # Limpeza total para o próximo agente não herdar nada
     st.session_state.agente_selecionado = None 
     st.session_state.processamento_liberado = False
     st.session_state.resultado_gerado = False
     st.session_state.resultado_final = None
-    st.session_state.input_provisorio = "" # Limpa o texto salvo
+    st.session_state.input_provisorio = "" 
     st.switch_page("pages/agentes.py")
