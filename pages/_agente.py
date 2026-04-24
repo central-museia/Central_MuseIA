@@ -123,7 +123,6 @@ elif not plano_ativo:
             st.switch_page("pages/pagamento.py")
 else:
     st.success(f"✅ **Tudo pronto!** Robô: **{ag.get('nome')}**")
-    # -----------------------------------------------------------
 
     # Regras e Códigos vindos do Banco de Dados
     regras = ag.get('regras_processamento', {})
