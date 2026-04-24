@@ -100,22 +100,26 @@ if not st.session_state.processamento_liberado:
 # =========================================
 if st.session_state.processamento_liberado:
     
-    # --- 🔒 UX PREVENTIVA: VERIFICAÇÃO DE STATUS ANTES DO INPUT ---
-    # (Tudo o que acontece aqui dentro deve ter 4 espaços de recuo)
+    # 1. PEGA O STATUS
     logado = st.session_state.get("logado", False)
     usuario = st.session_state.get("usuario", {})
     plano_ativo = usuario.get("ativo", False) if logado else False
+
+    # 2. LIMPEZA DE SEGURANÇA (Adicione isso aqui!)
+    # Se ele já está logado, a "origem" não deve mais existir para não bugar o login
+    if logado:
+        st.session_state.origem = None
 
     if not logado:
         col_aviso, col_btn = st.columns([3, 1])
         with col_aviso:
             st.warning("🔒 **Modo Visualização:** Faça login para processar arquivos.")
         with col_btn:
-            # Espaçador para alinhar o botão verticalmente com o warning
             st.write("") 
             if st.button("Fazer Login 🔑", use_container_width=True, key="btn_login_prev"):
                 st.session_state.origem = "pages/_agente.py"
                 st.switch_page("pages/login.py")
+                st.stop() # <-- ADICIONE ISSO (Evita que o script tente rodar o resto)
 
     elif not plano_ativo:
         col_aviso, col_btn = st.columns([3, 1])
@@ -125,6 +129,7 @@ if st.session_state.processamento_liberado:
             st.write("") 
             if st.button("Renovar Plano 💳", use_container_width=True, key="btn_pag_prev"):
                 st.switch_page("pages/pagamento.py")
+                st.stop() # <-- ADICIONE ISSO
     else:
         st.success(f"✅ **Tudo pronto!** Você está usando o robô: **{ag.get('nome')}**")
 
@@ -132,15 +137,14 @@ if st.session_state.processamento_liberado:
     regras = ag.get('regras_processamento', {})
     codigo_python = ag.get("codigo_python")
 
-    # Inicialização de estados de processamento (Mantenha o recuo!)
+    # Inicialização de estados (Mantenha o recuo!)
     if "resultado_gerado" not in st.session_state:
         st.session_state.resultado_gerado = False
     if "executar_agora" not in st.session_state:
         st.session_state.executar_agora = False
     if "input_execucao" not in st.session_state:
         st.session_state.input_execucao = None
-
-    # O RESTANTE DO SEU CÓDIGO (st.file_uploader, st.text_area) DEVE CONTINUAR AQUI COM O MESMO RECUO
+        
     # =========================================
     # MODO INPUT
     # =========================================
