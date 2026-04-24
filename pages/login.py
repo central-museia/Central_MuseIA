@@ -78,10 +78,9 @@ with aba_recuperar:
                     st.error("Erro ao processar solicitação.")
         else:
             st.warning("Informe o e-mail.")
-
-
+# --- FINAL DO ARQUIVO pages/login.py ---
 st.markdown("---")
+
 if st.button("🏠 Voltar para a Vitrine"):
-    # Como a Home é uma função dentro do arquivo principal, 
-    # o caminho mais seguro para voltar à vitrine é chamar a página de agentes:
+    # ESTA LINHA PRECISA DE EXATAMENTE 4 ESPAÇOS ANTES DELA
     st.switch_page("pages/agentes.py")
