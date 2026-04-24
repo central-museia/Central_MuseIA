@@ -143,6 +143,6 @@ if st.query_params.get("status") == "approved":
         st.error(f"Erro ao atualizar acesso no banco: {e}")
         # No arquivo pages/login.py
 st.markdown("---")
-if st.button("🏠 Voltar para a Vitrine"):
+if st.button("Escolha seu Agente"):
     # Chamando o arquivo da vitrine diretamente
     st.switch_page("pages/agentes.py")
