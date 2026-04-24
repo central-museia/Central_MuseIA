@@ -81,5 +81,6 @@ with aba_recuperar:
 
 # 3. VOLTAR
 st.markdown("---")
-if st.button("🏠 Voltar para a Vitrine"):
-    st.switch_page("streamlit_app.py")
+if st.button("Voltar"):
+    # Em vez do arquivo, usamos o título que você registrou no st.Page
+    st.switch_page("MuseIA")
