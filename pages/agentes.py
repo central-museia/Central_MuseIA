@@ -139,3 +139,9 @@ for i, ag in enumerate(agentes_filtrados):
                 except:
                     # Se falhar, tenta pelo título que definimos no maestro
                     st.switch_page("pages/_agente.py")
+
+        # 3. VOLTAR
+        st.markdown("---")
+        if st.button("Voltar"):
+        # Em vez do arquivo, usamos o título que você registrou no st.Page
+        st.switch_page("MuseIA")
