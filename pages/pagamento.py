@@ -142,8 +142,9 @@ if st.query_params.get("status") == "approved":
     except Exception as e:
         st.error(f"Erro ao atualizar acesso no banco: {e}")
 
-# 3. VOLTAR
+# --- FINAL DO ARQUIVO pages/login.py ---
 st.markdown("---")
-if st.button("Voltar"):
-    # Em vez do arquivo, usamos o título que você registrou no st.Page
-    st.switch_page("MuseIA")
+
+if st.button("🏠 Voltar para a Vitrine"):
+    # ESTA LINHA PRECISA DE EXATAMENTE 4 ESPAÇOS ANTES DELA
+    st.switch_page("pages/agentes.py")
