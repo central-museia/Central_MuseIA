@@ -1,3 +1,4 @@
+st.session_state.origem = None
 import streamlit as st
 import time
 from database.cliente import validar_login, cadastrar_usuario, recuperar_senha
