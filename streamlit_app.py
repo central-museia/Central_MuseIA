@@ -192,33 +192,22 @@ def minha_home():
 
 
 # =========================================
-# 3. DEFINIÇÃO DAS PÁGINAS (FORA DA NAVEGAÇÃO)
+# 3. DEFINIÇÃO DAS VARIÁVEIS DE PÁGINA
 # =========================================
+# Definimos TUDO primeiro para o Python não se perder
+pag_home = st.Page(minha_home, title="MuseIA", icon="🏠", default=True)
+pag_agentes = st.Page("pages/agentes.py", title="Agentes", icon="🤖")
+pag_login = st.Page("pages/login.py", title="Login", icon="🔑")
+pag_pagamento = st.Page("pages/pagamento.py", title="Pagamento", icon="💳")
+pag_redefinir = st.Page("pages/redefinir.py", title="Mudar minha senha", icon="🛡️")
 
-# 1. Defina a página oculta como uma variável
+# Esta é a página que o botão "Abrir" precisa, mas que não vai ter título no menu
 pag_detalhes = st.Page("pages/_agente.py", title="Detalhes do Agente")
 
-# 2. No st.navigation, coloque ela em uma lista "solta" ou sem rótulo
-pg = st.navigation({
-    "Principal": [
-        st.Page(minha_home, title="MuseIA", icon="🏠"),
-        st.Page("pages/agentes.py", title="Agentes", icon="🤖"),
-    ],
-    "Minha Conta": [
-        st.Page("pages/login.py", title="Login", icon="🔑"),
-        st.Page("pages/pagamento.py", title="Pagamento", icon="💳"),
-        st.Page("pages/redefinir.py", title="Mudar minha senha", icon="🛡️"),
-    ],
-    # Adicione essa linha abaixo. O Streamlit registra a página, 
-    # mas como a chave é oculta ou nula, ela costuma não aparecer no menu.
-    " ": [pag_detalhes] 
-})
-
-pg.run()
-
 # =========================================
-# 4. MAPEAMENTO DO MENU (SÓ O QUE DEVE APARECER)
+# 4. MAPEAMENTO DO MENU (APENAS UM BLOCO)
 # =========================================
+# Aqui organizamos o que aparece e o que fica escondido
 pg = st.navigation({
     "Principal": [
         pag_home, 
@@ -228,10 +217,13 @@ pg = st.navigation({
         pag_login,
         pag_pagamento,
         pag_redefinir
-    ]
+    ],
+    # O segredo: a chave " " registra a página Detalhes mas não cria rótulo no menu
+    " ": [pag_detalhes] 
 })
 
 # =========================================
-# 5. EXECUÇÃO
+# 5. EXECUÇÃO ÚNICA
 # =========================================
+# Esse comando deve aparecer APENAS UMA VEZ no arquivo inteiro
 pg.run()
