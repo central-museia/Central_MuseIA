@@ -142,7 +142,8 @@ if st.query_params.get("status") == "approved":
     except Exception as e:
         st.error(f"Erro ao atualizar acesso no banco: {e}")
 
-# Rodapé
-st.divider()
-if st.button("⬅️ Voltar para a Vitrine"):
-    st.switch_page("streamlit_app.py")
+# 3. VOLTAR
+st.markdown("---")
+if st.button("Voltar"):
+    # Em vez do arquivo, usamos o título que você registrou no st.Page
+    st.switch_page("MuseIA")
