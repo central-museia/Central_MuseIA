@@ -80,6 +80,6 @@ with aba_recuperar:
             st.warning("Informe o e-mail.")
             # No arquivo pages/login.py
 st.markdown("---")
-if st.button("🏠 Voltar para a Vitrine"):
+if st.button("Escolha seu Agente"):
     # Chamando o arquivo da vitrine diretamente
     st.switch_page("pages/agentes.py")
