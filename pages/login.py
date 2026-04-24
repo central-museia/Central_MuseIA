@@ -79,8 +79,9 @@ with aba_recuperar:
         else:
             st.warning("Informe o e-mail.")
 
-# 3. VOLTAR
+
 st.markdown("---")
-if st.button("Voltar"):
-    # Em vez do arquivo, usamos o título que você registrou no st.Page
-    st.switch_page("MuseIA")
+if st.button("🏠 Voltar para a Vitrine"):
+    # Como a Home é uma função dentro do arquivo principal, 
+    # o caminho mais seguro para voltar à vitrine é chamar a página de agentes:
+    st.switch_page("pages/agentes.py")
