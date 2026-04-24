@@ -78,10 +78,8 @@ with aba_recuperar:
                     st.error("Erro ao processar solicitação.")
         else:
             st.warning("Informe o e-mail.")
-
-# --- BLOCO PADRONIZADO DE RETORNO ---
+            # No arquivo pages/login.py
 st.markdown("---")
 if st.button("🏠 Voltar para a Vitrine"):
-    # Usamos o caminho relativo do arquivo principal. 
-    # Se o seu arquivo principal se chama streamlit_app.py, é este o comando:
-    st.switch_page("streamlit_app.py")
+    # Chamando o arquivo da vitrine diretamente
+    st.switch_page("pages/agentes.py")
