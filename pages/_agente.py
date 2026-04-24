@@ -212,7 +212,10 @@ if st.session_state.processamento_liberado:
 st.write("") 
 
 if st.button("⬅ Voltar para Galeria", key="btn_voltar_unico"):
+    # ✅ LIMPEZA TOTAL PARA NÃO TRAVAR O PRÓXIMO AGENTE
     st.session_state.agente_selecionado = None 
     st.session_state.processamento_liberado = False
+    st.session_state.resultado_gerado = False
     st.session_state.resultado_final = None
+    st.session_state.input_provisorio = "" # Limpa o texto salvo
     st.switch_page("pages/agentes.py")
