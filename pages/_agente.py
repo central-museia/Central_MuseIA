@@ -99,11 +99,25 @@ if not st.session_state.processamento_liberado:
 # ÁREA DE TRABALHO
 # =========================================
 if st.session_state.processamento_liberado:
-    st.info(f"Você está usando o robô: **{ag.get('nome')}**")
     
+    # --- 🔒 UX PREVENTIVA: VERIFICAÇÃO DE STATUS ANTES DO INPUT ---
+    logado = st.session_state.get("logado", False)
+    usuario = st.session_state.get("usuario", {})
+    plano_ativo = usuario.get("ativo", False) if logado else False
+
+    if not logado:
+        st.warning("🔒 **Modo Visualização:** Você não está logado. Para não perder o progresso ao subir arquivos, recomendamos [fazer login](login) agora.")
+    elif not plano_ativo:
+        st.error("⚠️ **Plano Inativo:** Seu acesso expirou. Você pode testar a interface, mas precisará [renovar seu plano](pagamento) para gerar o resultado final.")
+    else:
+        st.success(f"✅ **Tudo pronto!** Você está usando o robô: **{ag.get('nome')}**")
+    # -----------------------------------------------------------
+
+    # Regras e Códigos vindos do Banco de Dados
     regras = ag.get('regras_processamento', {})
     codigo_python = ag.get("codigo_python")
 
+    # Inicialização de estados de processamento
     if "resultado_gerado" not in st.session_state:
         st.session_state.resultado_gerado = False
     if "executar_agora" not in st.session_state:
