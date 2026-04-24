@@ -100,17 +100,29 @@ if not st.session_state.processamento_liberado:
 # =========================================
 if st.session_state.processamento_liberado:
     
-    # --- 🔒 UX PREVENTIVA: VERIFICAÇÃO DE STATUS ANTES DO INPUT ---
-    logado = st.session_state.get("logado", False)
-    usuario = st.session_state.get("usuario", {})
-    plano_ativo = usuario.get("ativo", False) if logado else False
+# --- 🔒 UX PREVENTIVA: VERIFICAÇÃO DE STATUS ANTES DO INPUT ---
+logado = st.session_state.get("logado", False)
+usuario = st.session_state.get("usuario", {})
+plano_ativo = usuario.get("ativo", False) if logado else False
 
-    if not logado:
-        st.warning("🔒 **Modo Visualização:** Você não está logado. Para não perder o progresso ao subir arquivos, recomendamos [fazer login](login) agora.")
-    elif not plano_ativo:
-        st.error("⚠️ **Plano Inativo:** Seu acesso expirou. Você pode testar a interface, mas precisará [renovar seu plano](pagamento) para gerar o resultado final.")
-    else:
-        st.success(f"✅ **Tudo pronto!** Você está usando o robô: **{ag.get('nome')}**")
+if not logado:
+    col_aviso, col_btn = st.columns([3, 1])
+    with col_aviso:
+        st.warning("🔒 **Modo Visualização:** Faça login para processar arquivos.")
+    with col_btn:
+        if st.button("Fazer Login 🔑", use_container_width=True):
+            st.session_state.origem = "pages/_agente.py" # <--- Carimba a volta
+            st.switch_page("pages/login.py") # <--- Navega na mesma aba
+
+elif not plano_ativo:
+    col_aviso, col_btn = st.columns([3, 1])
+    with col_aviso:
+        st.error("⚠️ **Plano Inativo:** Renove para gerar resultados.")
+    with col_btn:
+        if st.button("Renovar Plano 💳", use_container_width=True):
+            st.switch_page("pages/pagamento.py")
+else:
+    st.success(f"✅ **Tudo pronto!** Robô: **{ag.get('nome')}**")
     # -----------------------------------------------------------
 
     # Regras e Códigos vindos do Banco de Dados
