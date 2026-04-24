@@ -123,10 +123,20 @@ for i, ag in enumerate(agentes_filtrados):
             # 4. Renderização Final
             st.image(img_exibir, use_container_width=True)
 
-            # Título e Botão (mantenha como estava)
+          # Título do Agente
             nome_agente = ag.get('nome', 'Agente sem nome')
             st.markdown(f"<p style='font-size: 13px; font-weight: 600; margin-top: 5px; color: #f0f0f0;'>{nome_agente}</p>", unsafe_allow_html=True)
             
+            # Botão Abrir
+            # DICA: O key usa o ID do banco para não dar conflito se você filtrar a lista
             if st.button("Abrir", key=f"ag_{ag.get('id', i)}", use_container_width=True):
+                # 1. Salva o agente escolhido na memória
                 st.session_state.agente_selecionado = ag
-                st.switch_page("pages/_agente.py")
+                
+                # 2. Navega para a página de detalhes
+                # Como ela está na pasta /pages e começa com "_", o Streamlit entende o caminho:
+                try:
+                    st.switch_page("pages/_agente.py")
+                except Exception as e:
+                    # Caso o Streamlit reclame da rota por estar oculta no menu:
+                    st.error("Erro ao abrir detalhes. Verifique se a página _agente.py está na pasta /pages.")
