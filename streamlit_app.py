@@ -195,16 +195,26 @@ def minha_home():
 # 3. DEFINIÇÃO DAS PÁGINAS (FORA DA NAVEGAÇÃO)
 # =========================================
 
-# Criamos as variáveis das páginas. 
-# A 'pag_detalhes' NÃO será colocada no dicionário do menu lateral.
-pag_home = st.Page(minha_home, title="MuseIA", icon="🏠", default=True)
-pag_agentes = st.Page("pages/agentes.py", title="Agentes", icon="🤖")
-pag_login = st.Page("pages/login.py", title="Login", icon="🔑")
-pag_pagamento = st.Page("pages/pagamento.py", title="Pagamento", icon="💳")
-pag_redefinir = st.Page("pages/redefinir.py", title="Mudar minha senha", icon="🛡️")
+# 1. Defina a página oculta como uma variável
+pag_detalhes = st.Page("pages/_agente.py", title="Detalhes do Agente")
 
-# ESSA É A PÁGINA "INVISÍVEL"
-pag_detalhes = st.Page("pages/_agente.py", title="Detalhes") 
+# 2. No st.navigation, coloque ela em uma lista "solta" ou sem rótulo
+pg = st.navigation({
+    "Principal": [
+        st.Page(minha_home, title="MuseIA", icon="🏠"),
+        st.Page("pages/agentes.py", title="Agentes", icon="🤖"),
+    ],
+    "Minha Conta": [
+        st.Page("pages/login.py", title="Login", icon="🔑"),
+        st.Page("pages/pagamento.py", title="Pagamento", icon="💳"),
+        st.Page("pages/redefinir.py", title="Mudar minha senha", icon="🛡️"),
+    ],
+    # Adicione essa linha abaixo. O Streamlit registra a página, 
+    # mas como a chave é oculta ou nula, ela costuma não aparecer no menu.
+    " ": [pag_detalhes] 
+})
+
+pg.run()
 
 # =========================================
 # 4. MAPEAMENTO DO MENU (SÓ O QUE DEVE APARECER)
