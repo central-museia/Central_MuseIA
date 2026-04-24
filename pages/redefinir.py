@@ -41,6 +41,8 @@ with st.form("set_password"):
         else:
             st.warning("Senhas não conferem ou são curtas (mínimo 6 caracteres).")
 
-# Link de emergência caso ele se perca
-if st.button("Voltar para o Início"):
-    st.switch_page("streamlit_app.py")
+# No arquivo pages/login.py
+st.markdown("---")
+if st.button("🏠 Voltar para a Vitrine"):
+    # Chamando o arquivo da vitrine diretamente
+    st.switch_page("pages/agentes.py")
