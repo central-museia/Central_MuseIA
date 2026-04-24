@@ -130,13 +130,13 @@ for i, ag in enumerate(agentes_filtrados):
             # Botão Abrir
             # DICA: O key usa o ID do banco para não dar conflito se você filtrar a lista
             if st.button("Abrir", key=f"ag_{ag.get('id', i)}", use_container_width=True):
-    # 1. Salva na memória (isso você já fez e está certo)
-    st.session_state.agente_selecionado = ag
+            # 1. Salva na memória (isso você já fez e está certo)
+            st.session_state.agente_selecionado = ag
     
-    # 2. Tenta a navegação
-    try:
-        # Tente usar o caminho relativo exato
-        st.switch_page("pages/_agente.py")
-    except:
-        # Se falhar, tente pelo título que você deu à página no passo 1
-        st.switch_page("Detalhes do Agente")
+            # 2. Tenta a navegação
+            try:
+            # Tente usar o caminho relativo exato
+            st.switch_page("pages/_agente.py")
+            except:
+            # Se falhar, tente pelo título que você deu à página no passo 1
+            st.switch_page("Detalhes do Agente")
