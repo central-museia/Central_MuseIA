@@ -142,6 +142,6 @@ for i, ag in enumerate(agentes_filtrados):
 
 # No arquivo pages/login.py
 st.markdown("---")
-if st.button("Escolha seu Agente"):
+if st.button("Voltar"):
     # Chamando o arquivo da vitrine diretamente
-    st.switch_page("pages/agentes.py")
+    st.switch_page("streamlit_app.py")
