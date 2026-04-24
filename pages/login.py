@@ -78,9 +78,10 @@ with aba_recuperar:
                     st.error("Erro ao processar solicitação.")
         else:
             st.warning("Informe o e-mail.")
-# --- FINAL DO ARQUIVO pages/login.py ---
-st.markdown("---")
 
+# --- BLOCO PADRONIZADO DE RETORNO ---
+st.markdown("---")
 if st.button("🏠 Voltar para a Vitrine"):
-    # ESTA LINHA PRECISA DE EXATAMENTE 4 ESPAÇOS ANTES DELA
-    st.switch_page("pages/agentes.py")
+    # Usamos o caminho relativo do arquivo principal. 
+    # Se o seu arquivo principal se chama streamlit_app.py, é este o comando:
+    st.switch_page("streamlit_app.py")
