@@ -127,16 +127,15 @@ for i, ag in enumerate(agentes_filtrados):
             nome_agente = ag.get('nome', 'Agente sem nome')
             st.markdown(f"<p style='font-size: 13px; font-weight: 600; margin-top: 5px; color: #f0f0f0;'>{nome_agente}</p>", unsafe_allow_html=True)
             
-            # Botão Abrir
-            # DICA: O key usa o ID do banco para não dar conflito se você filtrar a lista
+            # Botão Abrir (Ajustado com indentação correta)
             if st.button("Abrir", key=f"ag_{ag.get('id', i)}", use_container_width=True):
-            # 1. Salva na memória (isso você já fez e está certo)
-            st.session_state.agente_selecionado = ag
-    
-            # 2. Tenta a navegação
-            try:
-            # Tente usar o caminho relativo exato
-            st.switch_page("pages/_agente.py")
-            except:
-            # Se falhar, tente pelo título que você deu à página no passo 1
-            st.switch_page("Detalhes do Agente")
+                # 1. Salva na memória
+                st.session_state.agente_selecionado = ag
+                
+                # 2. Tenta a navegação
+                try:
+                    # Tenta pelo caminho do arquivo (mais seguro)
+                    st.switch_page("pages/_agente.py")
+                except:
+                    # Se falhar, tenta pelo título que definimos no maestro
+                    st.switch_page("Detalhes do Agente")
