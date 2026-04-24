@@ -139,9 +139,9 @@ for i, ag in enumerate(agentes_filtrados):
                 except:
                     # Se falhar, tenta pelo título que definimos no maestro
                     st.switch_page("pages/_agente.py")
-                    # --- BLOCO PADRONIZADO DE RETORNO ---
+
+# No arquivo pages/login.py
 st.markdown("---")
 if st.button("🏠 Voltar para a Vitrine"):
-    # Usamos o caminho relativo do arquivo principal. 
-    # Se o seu arquivo principal se chama streamlit_app.py, é este o comando:
-    st.switch_page("streamlit_app.py")
+    # Chamando o arquivo da vitrine diretamente
+    st.switch_page("pages/agentes.py")
