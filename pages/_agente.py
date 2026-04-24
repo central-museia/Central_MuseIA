@@ -100,35 +100,39 @@ if not st.session_state.processamento_liberado:
 # =========================================
 if st.session_state.processamento_liberado:
     
-# --- 🔒 UX PREVENTIVA: VERIFICAÇÃO DE STATUS ANTES DO INPUT ---
-logado = st.session_state.get("logado", False)
-usuario = st.session_state.get("usuario", {})
-plano_ativo = usuario.get("ativo", False) if logado else False
+    # --- 🔒 UX PREVENTIVA: VERIFICAÇÃO DE STATUS ANTES DO INPUT ---
+    # (Tudo o que acontece aqui dentro deve ter 4 espaços de recuo)
+    logado = st.session_state.get("logado", False)
+    usuario = st.session_state.get("usuario", {})
+    plano_ativo = usuario.get("ativo", False) if logado else False
 
-if not logado:
-    col_aviso, col_btn = st.columns([3, 1])
-    with col_aviso:
-        st.warning("🔒 **Modo Visualização:** Faça login para processar arquivos.")
-    with col_btn:
-        if st.button("Fazer Login 🔑", use_container_width=True):
-            st.session_state.origem = "pages/_agente.py" # <--- Carimba a volta
-            st.switch_page("pages/login.py") # <--- Navega na mesma aba
+    if not logado:
+        col_aviso, col_btn = st.columns([3, 1])
+        with col_aviso:
+            st.warning("🔒 **Modo Visualização:** Faça login para processar arquivos.")
+        with col_btn:
+            # Espaçador para alinhar o botão verticalmente com o warning
+            st.write("") 
+            if st.button("Fazer Login 🔑", use_container_width=True, key="btn_login_prev"):
+                st.session_state.origem = "pages/_agente.py"
+                st.switch_page("pages/login.py")
 
-elif not plano_ativo:
-    col_aviso, col_btn = st.columns([3, 1])
-    with col_aviso:
-        st.error("⚠️ **Plano Inativo:** Renove para gerar resultados.")
-    with col_btn:
-        if st.button("Renovar Plano 💳", use_container_width=True):
-            st.switch_page("pages/pagamento.py")
-else:
-    st.success(f"✅ **Tudo pronto!** Robô: **{ag.get('nome')}**")
+    elif not plano_ativo:
+        col_aviso, col_btn = st.columns([3, 1])
+        with col_aviso:
+            st.error("⚠️ **Plano Inativo:** Renove para gerar resultados.")
+        with col_btn:
+            st.write("") 
+            if st.button("Renovar Plano 💳", use_container_width=True, key="btn_pag_prev"):
+                st.switch_page("pages/pagamento.py")
+    else:
+        st.success(f"✅ **Tudo pronto!** Você está usando o robô: **{ag.get('nome')}**")
 
-    # Regras e Códigos vindos do Banco de Dados
+    # --- CONFIGURAÇÕES DO AGENTE ---
     regras = ag.get('regras_processamento', {})
     codigo_python = ag.get("codigo_python")
 
-    # Inicialização de estados de processamento
+    # Inicialização de estados de processamento (Mantenha o recuo!)
     if "resultado_gerado" not in st.session_state:
         st.session_state.resultado_gerado = False
     if "executar_agora" not in st.session_state:
@@ -136,6 +140,7 @@ else:
     if "input_execucao" not in st.session_state:
         st.session_state.input_execucao = None
 
+    # O RESTANTE DO SEU CÓDIGO (st.file_uploader, st.text_area) DEVE CONTINUAR AQUI COM O MESMO RECUO
     # =========================================
     # MODO INPUT
     # =========================================
