@@ -12,6 +12,8 @@ st.set_page_config(layout="wide")
 # Inicialização silenciosa (Obrigatória para o Streamlit não travar na largada)
 if "resultado_final" not in st.session_state:
     st.session_state.resultado_final = None
+if "input_provisorio" not in st.session_state:
+    st.session_state.input_provisorio = ""
 
 st.markdown("""
     <style>
@@ -128,8 +130,9 @@ if st.session_state.processamento_liberado:
             type=["pdf", "csv", "txt"]
         )
         
-        dados_input = st.text_area(
-            "📋 Ou cole aqui as informações para o agente analisar:", 
+       dados_input = st.text_area(
+            "📋 Ou cole aqui as informações...", 
+            value=st.session_state.input_provisorio, # <--- ADICIONE ESTA LINHA
             height=200
         )
         
@@ -137,6 +140,7 @@ if st.session_state.processamento_liberado:
         
         with col_run:
             if st.button("🪄 Gerar Resultado Agora", use_container_width=True):
+                st.session_state.input_provisorio = dados_input
 
                 if not dados_input and not arquivo_upload:
                     st.warning("Por favor, insira um texto ou envie um arquivo.")
