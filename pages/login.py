@@ -26,21 +26,26 @@ with aba_login:
                 st.success(f"Bem-vinda, {user.get('nome')}!")
                 time.sleep(1)
                 
-                # 2. LÓGICA DE REDIRECIONAMENTO (DENTRO DO SUCESSO DO LOGIN)
-                pagina_retorno = st.session_state.get("origem")
+# 2. LÓGICA DE REDIRECIONAMENTO (DENTRO DO SUCESSO DO LOGIN)
+pagina_retorno = st.session_state.get("origem")
 
-                if pagina_retorno:
-                    st.session_state.origem = None # Limpa o rastro
-                    try:
-                        st.switch_page(pagina_retorno)
-                    except:
-                        st.switch_page("pages/_agente.py")
-                else:
-                    # Se não veio de um agente específico, vai para a vitrine
-                    st.switch_page("pages/agentes.py")
-            else:
-                st.error("E-mail ou senha incorretos.")
+if pagina_retorno == "pages/_agente.py":
+    # ✅ Se ele veio do robô, GARANTE que ele volte para o robô
+    st.session_state.origem = None # Limpa só agora
+    st.switch_page("pages/_agente.py")
 
+elif pagina_retorno:
+    # Se for outra página qualquer
+    st.session_state.origem = None
+    try:
+        st.switch_page(pagina_retorno)
+    except:
+        st.switch_page("pages/agentes.py")
+
+else:
+    # Caminho padrão se não houver origem
+    st.switch_page("pages/agentes.py")
+    
 # --- ABA DE CADASTRO ---
 with aba_cadastro:
     with st.form("cadastro_form"):
