@@ -141,10 +141,8 @@ if st.query_params.get("status") == "approved":
         
     except Exception as e:
         st.error(f"Erro ao atualizar acesso no banco: {e}")
-
-# --- BLOCO PADRONIZADO DE RETORNO ---
+        # No arquivo pages/login.py
 st.markdown("---")
 if st.button("🏠 Voltar para a Vitrine"):
-    # Usamos o caminho relativo do arquivo principal. 
-    # Se o seu arquivo principal se chama streamlit_app.py, é este o comando:
-    st.switch_page("streamlit_app.py")
+    # Chamando o arquivo da vitrine diretamente
+    st.switch_page("pages/agentes.py")
