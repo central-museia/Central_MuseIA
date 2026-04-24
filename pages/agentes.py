@@ -138,4 +138,4 @@ for i, ag in enumerate(agentes_filtrados):
                     st.switch_page("pages/_agente.py")
                 except:
                     # Se falhar, tenta pelo título que definimos no maestro
-                    st.switch_page("Detalhes do Agente")
+                    st.switch_page("pages/_agente.py")
