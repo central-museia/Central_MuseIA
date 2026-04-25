@@ -98,11 +98,11 @@ st.divider()
 # =========================
 # 💳 CARD PRINCIPAL (CENTRALIZADO)
 # =========================
-col1, col2, = st.columns([2, 2])
+st.markdown("### 🔓 Acesso completo MuseIA")
 
-with col2:
-    st.markdown("### 🔓 Acesso completo MuseIA")
+col1, col2 = st.columns([1,1])
 
+with col1:
     st.metric(
         label=f"{DIAS_ACESSO} dias de acesso",
         value=f"R$ {PRECO_ACESSO:.2f}",
@@ -111,15 +111,14 @@ with col2:
 
     st.caption("✔ Acesso imediato • ✔ Sem assinatura")
 
-    st.divider()
-
+with col2:
     st.markdown("#### 🎁 O que você desbloqueia")
 
     st.markdown("""
 - 🤖 Use seu agente quantas vezes quiser  
 - 🧠 Experimente outros agentes da MuseIA  
 - 📄 Crie e melhore seus conteúdos  
-- ⚡ Resolva tarefas do dia a dia mais rápido   
+- ⚡ Resolva tarefas do dia a dia mais rápido  
 """)
 
     st.divider()
