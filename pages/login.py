@@ -2,6 +2,10 @@ import streamlit as st
 import time
 from database.cliente import validar_login, cadastrar_usuario, recuperar_senha
 
+# Se já estiver logado, redireciona
+if st.session_state.get("logado"):
+    st.switch_page("pages/agentes.py")
+
 # 1. CONFIGURAÇÃO
 st.set_page_config(page_title="Acesso | MuseIA", layout="centered", initial_sidebar_state="collapsed")
 
@@ -27,24 +31,22 @@ with aba_login:
                 time.sleep(1)
                 
 # 2. LÓGICA DE REDIRECIONAMENTO (DENTRO DO SUCESSO DO LOGIN)
-pagina_retorno = st.session_state.get("origem")
+if st.session_state.get("logado"):
+    pagina_retorno = st.session_state.get("origem")
 
-if pagina_retorno == "pages/_agente.py":
-    # ✅ Se ele veio do robô, GARANTE que ele volte para o robô
-    st.session_state.origem = None # Limpa só agora
-    st.switch_page("pages/_agente.py")
+    if pagina_retorno == "pages/_agente.py":
+        st.session_state.origem = None
+        st.switch_page("pages/_agente.py")
 
-elif pagina_retorno:
-    # Se for outra página qualquer
-    st.session_state.origem = None
-    try:
-        st.switch_page(pagina_retorno)
-    except:
+    elif pagina_retorno:
+        st.session_state.origem = None
+        try:
+            st.switch_page(pagina_retorno)
+        except:
+            st.switch_page("pages/agentes.py")
+
+    else:
         st.switch_page("pages/agentes.py")
-
-else:
-    # Caminho padrão se não houver origem
-    st.switch_page("pages/agentes.py")
     
 # --- ABA DE CADASTRO ---
 with aba_cadastro:
