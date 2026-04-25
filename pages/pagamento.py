@@ -86,9 +86,6 @@ def criar_link_pagamento(valor_venda):
     result = sdk.preference().create(preference_data)
     return result["response"]["init_point"]
 
-# 3. INTERFACE VISUAL
-st.title("💳 Ative seu Acesso Premium")
-
 # =========================
 # 🎬 HERO / DESTAQUE
 # =========================
@@ -161,35 +158,6 @@ else:
             except Exception as e:
                 st.error(f"Erro ao gerar pagamento: {e}")
 
-# 4. LÓGICA DE CHECKOUT
-if not st.session_state.get("logado"):
-    st.warning("Acesse sua conta para liberar o checkout.")
-    if st.button("Fazer Login ou Cadastro", use_container_width=True):
-        st.switch_page("pages/login.py")
-else:
-    st.write(f"""
-Olá, **{st.session_state.usuario.get('nome')}** 👋  
-
-Ative seu acesso agora e utilize seu agente com inteligência artificial.  
-Você também terá acesso à Central MuseIA por {DIAS_ACESSO} dias para explorar outras soluções.
-""")
-    
-    if st.button("Gerar Pagamento Seguro (Pix ou Cartão)", use_container_width=True):
-        try:
-            with st.spinner("Conectando ao Mercado Pago..."):
-                link_mp = criar_link_pagamento(PRECO_ACESSO)
-                
-                st.success("Tudo pronto! Pague agora para ativar seu acesso:")
-                st.markdown(f'''
-                    <a href="{link_mp}" target="_blank">
-                        <button style="width:100%; height:60px; background-color:#009ee3; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold; font-size:20px; box-shadow: 0 4px 15px rgba(0,158,227,0.3);">
-                            Ativar acesso por R$ {PRECO_ACESSO:.2f}
-                        </button>
-                    </a>
-                ''', unsafe_allow_html=True)
-                st.info("💡 Dica: O Pix libera seu acesso em segundos!")
-        except Exception as e:
-            st.error(f"Erro ao gerar pagamento: {e}")
 
 # 5. PROCESSAMENTO DO RETORNO (Ativação Automática)
 if st.query_params.get("status") == "approved":
