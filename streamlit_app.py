@@ -175,14 +175,35 @@ def minha_home():
     # =========================================
     st.markdown("## ❓ Dúvidas Frequentes")
     faqs = [
-        {"pergunta": "O que é a MuseIA?", "resposta": "A MuseIA é uma central de agentes inteligentes..."},
-        {"pergunta": "Preciso saber usar IA?", "resposta": "Não. Os agentes já são prontos para uso..."},
-        {"pergunta": "Os agentes realmente funcionam?", "resposta": "Sim. Cada agente foi criado para resolver um problema específico..."},
-        {"pergunta": "Vou economizar quanto tempo?", "resposta": "Tarefas que levavam horas podem ser feitas em minutos..."},
-        {"pergunta": "Preciso pagar para usar?", "resposta": "Acesso completo está disponível para membros."},
-        {"pergunta": "Posso usar mais de um agente?", "resposta": "Sim, conforme sua necessidade."},
-        {"pergunta": "Meus dados estão seguros?", "resposta": "Sim. A MuseIA utiliza práticas seguras para proteger seus dados."}
-    ]
+    {
+        "pergunta": "O que a MuseIA faz por mim?",
+        "resposta": "A MuseIA te ajuda a resolver tarefas do dia a dia de forma rápida. Você escolhe o que precisa e o agente faz por você."
+    },
+    {
+        "pergunta": "Preciso saber usar inteligência artificial?",
+        "resposta": "Não precisa. Tudo já está pronto. Você só escolhe o que quer fazer e segue os passos."
+    },
+    {
+        "pergunta": "Isso realmente funciona?",
+        "resposta": "Sim. Cada agente foi criado para resolver um problema específico, de forma simples e prática."
+    },
+    {
+        "pergunta": "Vou economizar tempo mesmo?",
+        "resposta": "Sim. Coisas que levariam horas podem ser feitas em poucos minutos com ajuda da MuseIA."
+    },
+    {
+        "pergunta": "Preciso pagar para começar?",
+        "resposta": "Você paga apenas quando quiser usar. Sem assinatura e sem compromisso."
+    },
+    {
+        "pergunta": "Posso usar mais de um agente?",
+        "resposta": "Sim. Durante o período de acesso, você pode usar diferentes agentes conforme sua necessidade."
+    },
+    {
+        "pergunta": "Meus dados estão seguros?",
+        "resposta": "Sim. Seus dados são tratados com segurança e não são compartilhados."
+    }
+]
 
     for item in faqs:
         with st.expander(item["pergunta"]):
