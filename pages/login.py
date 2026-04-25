@@ -27,7 +27,7 @@ with aba_login:
                 # 1. Salva os dados na sessão
                 st.session_state.logado = True
                 st.session_state.usuario = user
-                st.success(f"Bem-vinda, {user.get('nome')}!")
+                st.success(f"Olá, {user.get('nome')}!")
                 time.sleep(1)
                 
 # 2. LÓGICA DE REDIRECIONAMENTO (DENTRO DO SUCESSO DO LOGIN)
