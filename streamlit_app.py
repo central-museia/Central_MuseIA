@@ -145,7 +145,7 @@ def minha_home():
     # =========================================
     # PERFIS
     # =========================================
-    st.markdown("## 👤 Perfil")
+    st.markdown("## 👤 Para você")
     if perfis_db:
         cols = st.columns(min(len(perfis_db), 6))
         for i, perfil in enumerate(perfis_db):
@@ -159,7 +159,7 @@ def minha_home():
     # =========================================
     # COLEÇÕES
     # =========================================
-    st.markdown("## 📦 Coleções")
+    st.markdown("## 📦 O que você precisa")
     if colecoes_db:
         cols = st.columns(min(len(colecoes_db), 6))
         for i, colecao in enumerate(colecoes_db):
