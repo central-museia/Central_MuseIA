@@ -26,7 +26,7 @@ idx_p = opcoes_perfil.index(p_inicial) if p_inicial in opcoes_perfil else 0
 idx_c = opcoes_colecao.index(c_inicial) if c_inicial in opcoes_colecao else 0
 
 # 3. INTERFACE DE BUSCA E FILTROS
-busca = st.text_input("", placeholder="Buscar agente...", label_visibility="collapsed")
+busca = st.text_input("", placeholder="Buscar agente...", label_visibility="collapsed",key="busca")
 
 col1, col2 = st.columns(2)
 with col1:
@@ -37,10 +37,11 @@ with col2:
     filtro_colecao = st.selectbox("Coleção", opcoes_colecao, index=idx_c)
     st.session_state.filtro_colecao = filtro_colecao
 
-if filtro_perfil != "Todos" or filtro_colecao != "Todos" or busca:
-    if st.button("❌ Limpar Filtros"):
+if filtro_perfil != "Todos" or filtro_colecao != "Todos" or st.session_state.busca:
+    if st.button("🔄 Mostrar todos"):
         st.session_state.filtro_perfil = "Todos"
         st.session_state.filtro_colecao = "Todos"
+        st.rerun()
 
 # 4. PROCESSAMENTO DA FILTRAGEM
 agentes_filtrados = agentes_db
