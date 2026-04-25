@@ -89,9 +89,9 @@ def criar_link_pagamento(valor_venda):
 # =========================
 # 🎬 HERO / DESTAQUE
 # =========================
-st.markdown("## 💳 Ative seu Acesso")
+st.markdown("## 💡 Resolver o que eu preciso")
 
-st.caption("Resolva o que precisa com inteligência artificial, sem assinatura.")
+st.caption("Sem complicação. Comece agora.")
 
 st.divider()
 
@@ -101,7 +101,7 @@ st.divider()
 col1, col2, col3 = st.columns([1, 2, 1])
 
 with col2:
-    st.markdown("### 🔥 Passe MuseIA")
+    st.markdown("### 🔓 Acesso completo MuseIA")
 
     st.metric(
         label=f"{DIAS_ACESSO} dias de acesso",
@@ -116,10 +116,10 @@ with col2:
     st.markdown("#### 🎁 O que você desbloqueia")
 
     st.markdown("""
-- 🤖 Use seu agente principal ilimitadamente  
-- 🧠 Acesse outros agentes da Central MuseIA  
-- 📄 Crie, revise e melhore conteúdos  
-- ⚡ Resolva tarefas do dia a dia com IA  
+- 🤖 Use seu agente quantas vezes quiser  
+- 🧠 Experimente outros agentes da MuseIA  
+- 📄 Crie e melhore seus conteúdos  
+- ⚡ Resolva tarefas do dia a dia mais rápido   
 """)
 
     st.divider()
@@ -127,27 +127,27 @@ with col2:
 # =========================
 # 🎯 PROVA / CONTEXTO
 # =========================
-st.info("💡 Você paga uma vez e usa quando precisar. Sem mensalidade.")
+st.info("💡 Você paga uma vez e usa. Sem assinatura.")
 
 # =========================
 # 🔐 CHECKOUT
 # =========================
 if not st.session_state.get("logado"):
-    st.warning("Acesse sua conta para liberar o checkout.")
+    st.warning("Entre ou crie sua conta para começar")
 
     col1, col2, col3 = st.columns([1,2,1])
     with col2:
-        if st.button("🔑 Entrar ou criar conta", use_container_width=True):
+        if st.button("👉 Entrar para começar", use_container_width=True):
             st.switch_page("pages/login.py")
 
 else:
     nome = st.session_state.usuario.get("nome")
 
-    st.success(f"Pronto, {nome}! Ative seu acesso abaixo 👇")
+    st.success(f"{nome}, você já pode começar 👇")
 
     col1, col2, col3 = st.columns([1,2,1])
     with col2:
-        if st.button(f"💳 Ativar acesso por R$ {PRECO_ACESSO:.2f}", use_container_width=True):
+        if st.button(f"💳 Começar agora por R$ {PRECO_ACESSO:.2f}", use_container_width=True):
             try:
                 with st.spinner("Gerando pagamento..."):
                     link_mp = criar_link_pagamento(PRECO_ACESSO)
@@ -180,7 +180,7 @@ if st.query_params.get("status") == "approved":
         st.session_state.usuario["venc"] = data_vencimento
         
         st.balloons()
-        st.success("✨ Pagamento Confirmado! Seu acesso está liberado.")
+        st.success("✨ Tudo pronto! Você já pode usar seu agente.")
         
         time.sleep(3)
         st.switch_page("pages/agentes.py")
