@@ -81,7 +81,6 @@ def criar_link_pagamento(valor_venda):
 # 3. INTERFACE VISUAL
 st.title("💳 Ative seu Acesso Premium")
 
-# Banner de Ancoragem de Preço
 st.markdown(f"""
 <div style="
     background: linear-gradient(145deg, #121212, #1e1e1e);
@@ -92,16 +91,7 @@ st.markdown(f"""
     margin-bottom: 30px;
     box-shadow: 0 15px 35px rgba(0,0,0,0.8);
 ">
-    <span style="
-        background-color: #e50914;
-        color: white;
-        padding: 5px 15px;
-        border-radius: 50px;
-        font-size: 11px;
-        font-weight: 800;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-    ">
+    <span style="background-color: #e50914; color: white; padding: 5px 15px; border-radius: 50px; font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;">
         Oferta de Lançamento
     </span>
 
@@ -121,25 +111,13 @@ st.markdown(f"""
 
     <hr style="border: 0; height: 1px; background: linear-gradient(to right, transparent, rgba(229,9,20,0.5), transparent); margin: 25px 0;">
 
-    <div style="
-        display: inline-block;
-        background: rgba(0, 255, 156, 0.1);
-        border: 1px solid rgba(0, 255, 156, 0.2);
-        padding: 8px 20px;
-        border-radius: 12px;
-        margin-bottom: 20px;
-    ">
+    <div style="display: inline-block; background: rgba(0, 255, 156, 0.1); border: 1px solid rgba(0, 255, 156, 0.2); padding: 8px 20px; border-radius: 12px; margin-bottom: 20px;">
         <span style="color: #00ff9c; font-weight: 700; font-size: 16px;">
             ✓ {DIAS_ACESSO} Dias de Acesso Liberado
         </span>
     </div>
 
-    <div style="
-        padding: 20px;
-        background-color: rgba(255,255,255,0.03);
-        border-radius: 14px;
-        border: 1px solid rgba(255,255,255,0.05);
-    ">
+    <div style="padding: 20px; background-color: rgba(255,255,255,0.03); border-radius: 14px; border: 1px solid rgba(255,255,255,0.05);">
         <p style="color: #ffffff; margin-bottom: 8px; font-size: 15px; font-weight: 600;">
             Acesso à Central MuseIA
         </p>
@@ -147,15 +125,9 @@ st.markdown(f"""
             Use seu agente principal e explore <b>todos os outros robôs</b> da nossa inteligência durante o período.
         </p>
     </div>
-
-    <div style="margin-top: 25px; display: flex; justify-content: center; gap: 15px;">
-        <span style="color: #777; font-size: 12px;">🔒 Pagamento Único</span>
-        <span style="color: #777; font-size: 12px;">•</span>
-        <span style="color: #777; font-size: 12px;">⚡ Ativação Via Pix</span>
-    </div>
-
 </div>
 """, unsafe_allow_html=True)
+
 # 4. LÓGICA DE CHECKOUT
 if not st.session_state.get("logado"):
     st.warning("Acesse sua conta para liberar o checkout.")
