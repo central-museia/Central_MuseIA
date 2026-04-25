@@ -81,35 +81,77 @@ def criar_link_pagamento(valor_venda):
 # 3. INTERFACE VISUAL
 st.title("💳 Ative seu Acesso Premium")
 
-st.markdown(f"""
-<div style="background-color:#111; padding:25px; border-radius:15px; text-align:center; border:1px solid #222;">
+# =========================
+# 🎬 HERO / DESTAQUE
+# =========================
+st.markdown("## 💳 Ative seu Acesso")
 
-    <p style="color:#e50914; font-weight:bold; font-size:12px; letter-spacing:1px;">
-        OFERTA DE LANÇAMENTO
-    </p>
+st.caption("Resolva o que precisa com inteligência artificial, sem assinatura.")
 
-    <h2 style="color:white; font-size:38px; margin:10px 0;">
-        R$ {PRECO_ACESSO:.2f}
-    </h2>
+st.divider()
 
-    <p style="color:#777; text-decoration:line-through; font-size:14px;">
-        De R$ {PRECO_REFERENCIA:.2f}
-    </p>
+# =========================
+# 💳 CARD PRINCIPAL (CENTRALIZADO)
+# =========================
+col1, col2, col3 = st.columns([1, 2, 1])
 
-    <p style="color:#00ff9c; font-weight:bold; margin-top:10px;">
-        {DIAS_ACESSO} dias de acesso
-    </p>
+with col2:
+    st.markdown("### 🔥 Passe MuseIA")
 
-    <p style="color:#ccc; font-size:14px; margin-top:15px;">
-        Use seu agente e explore outros da Central MuseIA
-    </p>
+    st.metric(
+        label=f"{DIAS_ACESSO} dias de acesso",
+        value=f"R$ {PRECO_ACESSO:.2f}",
+        delta=f"De R$ {PRECO_REFERENCIA:.2f}"
+    )
 
-    <p style="color:#888; font-size:12px; margin-top:10px;">
-        Sem assinatura
-    </p>
+    st.caption("✔ Acesso imediato • ✔ Sem assinatura")
 
-</div>
-""", unsafe_allow_html=True)
+    st.divider()
+
+    st.markdown("#### 🎁 O que você desbloqueia")
+
+    st.markdown("""
+- 🤖 Use seu agente principal ilimitadamente  
+- 🧠 Acesse outros agentes da Central MuseIA  
+- 📄 Crie, revise e melhore conteúdos  
+- ⚡ Resolva tarefas do dia a dia com IA  
+""")
+
+    st.divider()
+
+# =========================
+# 🎯 PROVA / CONTEXTO
+# =========================
+st.info("💡 Você paga uma vez e usa quando precisar. Sem mensalidade.")
+
+# =========================
+# 🔐 CHECKOUT
+# =========================
+if not st.session_state.get("logado"):
+    st.warning("Acesse sua conta para liberar o checkout.")
+
+    col1, col2, col3 = st.columns([1,2,1])
+    with col2:
+        if st.button("🔑 Entrar ou criar conta", use_container_width=True):
+            st.switch_page("pages/login.py")
+
+else:
+    nome = st.session_state.usuario.get("nome")
+
+    st.success(f"Pronto, {nome}! Ative seu acesso abaixo 👇")
+
+    col1, col2, col3 = st.columns([1,2,1])
+    with col2:
+        if st.button(f"💳 Ativar acesso por R$ {PRECO_ACESSO:.2f}", use_container_width=True):
+            try:
+                with st.spinner("Gerando pagamento..."):
+                    link_mp = criar_link_pagamento(PRECO_ACESSO)
+
+                st.markdown(f"[👉 Clique aqui para pagar]({link_mp})")
+                st.info("💡 Pix libera em segundos")
+
+            except Exception as e:
+                st.error(f"Erro ao gerar pagamento: {e}")
 
 # 4. LÓGICA DE CHECKOUT
 if not st.session_state.get("logado"):
