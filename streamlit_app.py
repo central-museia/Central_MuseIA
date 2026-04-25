@@ -110,11 +110,13 @@ def minha_home():
     }
     </style>
     <div class="hero">
-        <h1 style="font-size:50px;">Automatize o que te trava</h1>
-        <p style="font-size:22px;">Recupere seu tempo com agentes inteligentes</p>
-        <p style="font-size:18px; opacity:0.8;">
-            Já devolvemos <b>1.284 horas</b> de trabalho repetitivo
+        <h1 style="font-size:46px;">Resolva o que você precisa agora</h1>
+        <p style="font-size:20px;">
+        Sem complicação. Sem precisar entender tecnologia.
         </p>
+<p style="font-size:16px; opacity:0.8;">
+Escolha um agente e deixe a MuseIA fazer por você
+</p>
     </div>
     """, unsafe_allow_html=True)
 
