@@ -98,7 +98,7 @@ st.divider()
 # =========================
 # 💳 CARD PRINCIPAL (CENTRALIZADO)
 # =========================
-col1, col2, col3 = st.columns([2, 2, 2])
+col1, col2, = st.columns([2, 2])
 
 with col2:
     st.markdown("### 🔓 Acesso completo MuseIA")
