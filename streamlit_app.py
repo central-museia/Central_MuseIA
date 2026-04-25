@@ -114,9 +114,9 @@ def minha_home():
         <p style="font-size:20px;">
         Sem complicação. Sem precisar entender tecnologia.
         </p>
-<p style="font-size:16px; opacity:0.8;">
-Escolha um agente e deixe a MuseIA fazer por você
-</p>
+        <p style="font-size:16px; opacity:0.8;">
+        Escolha um agente e deixe a MuseIA fazer por você
+        </p>
     </div>
     """, unsafe_allow_html=True)
 
