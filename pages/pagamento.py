@@ -14,7 +14,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- CONFIGURAÇÃO DE NEGÓCIO ---
-PRECO_ACESSO = 49.90
+PRECO_ACESSO = 1.00
 PRECO_REFERENCIA = 79.90  # apenas ancoragem visual
 DIAS_ACESSO = 30
 
