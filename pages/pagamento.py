@@ -6,9 +6,11 @@ from datetime import datetime, timedelta
 from database.cliente import get_client
 
 # --- CONFIGURAÇÃO DE NEGÓCIO ---
-PRECO_ORIGINAL = 79.90
-PRECO_PROMO = 1.00
+PRECO_ACESSO = 49.90
+PRECO_REFERENCIA = 79.90  # apenas ancoragem visual
 DIAS_ACESSO = 30
+
+NOME_PLANO = "Seu Agente MuseIA"
 
 # 1. CONFIGURAÇÃO DA PÁGINA
 st.set_page_config(page_title="Checkout | MuseIA", layout="centered")
@@ -44,7 +46,7 @@ def criar_link_pagamento(valor_venda):
     preference_data = {
         "items": [
             {
-                "title": f"Assinatura MuseIA Premium - {DIAS_ACESSO} Dias",
+                "title": f"{NOME_PLANO} - Acesso à Central MuseIA por {DIAS_ACESSO} dias",
                 "quantity": 1,
                 "unit_price": valor_venda,
                 "currency_id": "BRL"
@@ -81,11 +83,29 @@ st.title("💳 Ative seu Acesso Premium")
 
 # Banner de Ancoragem de Preço
 st.markdown(f"""
-    <div style="background-color: #1e1e1e; padding: 25px; border-radius: 12px; text-align: center; border: 1px solid #e50914; margin-bottom: 25px;">
-        <p style="margin: 0; color: #888; text-decoration: line-through; font-size: 18px;">De R$ {PRECO_ORIGINAL:.2f}</p>
-        <h2 style="margin: 0; color: #fff; font-size: 38px;">Por R$ {PRECO_PROMO:.2f}</h2>
-        <p style="color: #00ff00; font-weight: bold; margin-top: 5px;">Acesso total por {DIAS_ACESSO} dias</p>
-    </div>
+<div style="background-color: #1e1e1e; padding: 25px; border-radius: 12px; text-align: center; border: 1px solid #e50914; margin-bottom: 25px;">
+    
+    <p style="margin: 0; color: #888; text-decoration: line-through; font-size: 16px;">
+        De R$ {PRECO_REFERENCIA:.2f}
+    </p>
+
+    <h2 style="margin: 5px 0; color: #fff; font-size: 34px;">
+        R$ {PRECO_ACESSO:.2f}
+    </h2>
+
+    <p style="color: #00ff00; font-weight: bold; margin-top: 5px;">
+        Acesso por {DIAS_ACESSO} dias
+    </p>
+
+    <p style="color: #ccc; margin-top: 10px;">
+        Use seu agente e desbloqueie a Central MuseIA com outros agentes disponíveis durante o período.
+    </p>
+
+    <p style="color: #aaa; font-size: 13px; margin-top: 8px;">
+        Sem assinatura • Acesso imediato
+    </p>
+
+</div>
 """, unsafe_allow_html=True)
 
 # 4. LÓGICA DE CHECKOUT
@@ -94,18 +114,23 @@ if not st.session_state.get("logado"):
     if st.button("Fazer Login ou Cadastro", use_container_width=True):
         st.switch_page("pages/login.py")
 else:
-    st.write(f"Olá, **{st.session_state.usuario.get('nome')}**! Clique abaixo para gerar seu QR Code de pagamento.")
+    st.write(f"""
+Olá, **{st.session_state.usuario.get('nome')}** 👋  
+
+Ative seu acesso agora e utilize seu agente com inteligência artificial.  
+Você também terá acesso à Central MuseIA por {DIAS_ACESSO} dias para explorar outras soluções.
+""")
     
     if st.button("Gerar Pagamento Seguro (Pix ou Cartão)", use_container_width=True):
         try:
             with st.spinner("Conectando ao Mercado Pago..."):
-                link_mp = criar_link_pagamento(PRECO_PROMO)
+                link_mp = criar_link_pagamento(PRECO_ACESSO)
                 
                 st.success("Tudo pronto! Pague agora para ativar seu acesso:")
                 st.markdown(f'''
                     <a href="{link_mp}" target="_blank">
                         <button style="width:100%; height:60px; background-color:#009ee3; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold; font-size:20px; box-shadow: 0 4px 15px rgba(0,158,227,0.3);">
-                            Pagar R$ {PRECO_PROMO:.2f} com Mercado Pago
+                            Ativar acesso por R$ {PRECO_ACESSO:.2f}
                         </button>
                     </a>
                 ''', unsafe_allow_html=True)
