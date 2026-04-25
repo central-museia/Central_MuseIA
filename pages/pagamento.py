@@ -82,49 +82,32 @@ def criar_link_pagamento(valor_venda):
 st.title("💳 Ative seu Acesso Premium")
 
 st.markdown(f"""
-<div style="
-    background: linear-gradient(145deg, #121212, #1e1e1e);
-    padding: 40px 20px;
-    border-radius: 20px;
-    text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 30px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.8);
-">
-    <span style="background-color: #e50914; color: white; padding: 5px 15px; border-radius: 50px; font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;">
-        Oferta de Lançamento
-    </span>
+<div style="background-color:#111; padding:25px; border-radius:15px; text-align:center; border:1px solid #222;">
 
-    <h3 style="color: #ffffff; margin-top: 25px; font-weight: 400; font-size: 18px; margin-bottom: 0;">
-        Passe de Acesso Total
-    </h3>
+    <p style="color:#e50914; font-weight:bold; font-size:12px; letter-spacing:1px;">
+        OFERTA DE LANÇAMENTO
+    </p>
 
-    <div style="margin: 10px 0;">
-        <span style="color: #ffffff; font-size: 48px; font-weight: 900; letter-spacing: -1px;">
-            R$ {PRECO_ACESSO:.2f}
-        </span>
-    </div>
+    <h2 style="color:white; font-size:38px; margin:10px 0;">
+        R$ {PRECO_ACESSO:.2f}
+    </h2>
 
-    <p style="color: #666; font-size: 15px; margin: 0; text-decoration: line-through;">
+    <p style="color:#777; text-decoration:line-through; font-size:14px;">
         De R$ {PRECO_REFERENCIA:.2f}
     </p>
 
-    <hr style="border: 0; height: 1px; background: linear-gradient(to right, transparent, rgba(229,9,20,0.5), transparent); margin: 25px 0;">
+    <p style="color:#00ff9c; font-weight:bold; margin-top:10px;">
+        {DIAS_ACESSO} dias de acesso
+    </p>
 
-    <div style="display: inline-block; background: rgba(0, 255, 156, 0.1); border: 1px solid rgba(0, 255, 156, 0.2); padding: 8px 20px; border-radius: 12px; margin-bottom: 20px;">
-        <span style="color: #00ff9c; font-weight: 700; font-size: 16px;">
-            ✓ {DIAS_ACESSO} Dias de Acesso Liberado
-        </span>
-    </div>
+    <p style="color:#ccc; font-size:14px; margin-top:15px;">
+        Use seu agente e explore outros da Central MuseIA
+    </p>
 
-    <div style="padding: 20px; background-color: rgba(255,255,255,0.03); border-radius: 14px; border: 1px solid rgba(255,255,255,0.05);">
-        <p style="color: #ffffff; margin-bottom: 8px; font-size: 15px; font-weight: 600;">
-            Acesso à Central MuseIA
-        </p>
-        <p style="color: #aaa; margin: 0; font-size: 13px; line-height: 1.5;">
-            Use seu agente principal e explore <b>todos os outros robôs</b> da nossa inteligência durante o período.
-        </p>
-    </div>
+    <p style="color:#888; font-size:12px; margin-top:10px;">
+        Sem assinatura
+    </p>
+
 </div>
 """, unsafe_allow_html=True)
 
