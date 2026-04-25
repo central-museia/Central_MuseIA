@@ -84,74 +84,78 @@ st.title("💳 Ative seu Acesso Premium")
 # Banner de Ancoragem de Preço
 st.markdown(f"""
 <div style="
-    background: linear-gradient(135deg, #0f0f0f, #1c1c1c);
-    padding: 30px;
-    border-radius: 16px;
+    background: linear-gradient(145deg, #121212, #1e1e1e);
+    padding: 40px 20px;
+    border-radius: 20px;
     text-align: center;
-    border: 1px solid rgba(229,9,20,0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     margin-bottom: 30px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.8);
 ">
-
-    <p style="
-        color: #e50914;
-        font-weight: bold;
-        letter-spacing: 1px;
-        font-size: 13px;
-        margin-bottom: 10px;
-    ">
-        PASSE MUSEIA
-    </p>
-
-    <h2 style="
+    <span style="
+        background-color: #e50914;
         color: white;
-        font-size: 42px;
-        margin: 0;
-        font-weight: 700;
+        padding: 5px 15px;
+        border-radius: 50px;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-transform: uppercase;
     ">
-        R$ {PRECO_ACESSO:.2f}
-    </h2>
+        Oferta de Lançamento
+    </span>
 
-    <p style="
-        color: #bbb;
-        font-size: 14px;
-        margin-top: 5px;
-        text-decoration: line-through;
-    ">
+    <h3 style="color: #ffffff; margin-top: 25px; font-weight: 400; font-size: 18px; margin-bottom: 0;">
+        Passe de Acesso Total
+    </h3>
+
+    <div style="margin: 10px 0;">
+        <span style="color: #ffffff; font-size: 48px; font-weight: 900; letter-spacing: -1px;">
+            R$ {PRECO_ACESSO:.2f}
+        </span>
+    </div>
+
+    <p style="color: #666; font-size: 15px; margin: 0; text-decoration: line-through;">
         De R$ {PRECO_REFERENCIA:.2f}
     </p>
 
-    <p style="
-        color: #00ff9c;
-        font-weight: 600;
-        margin-top: 12px;
-        font-size: 16px;
-    ">
-        Acesso por {DIAS_ACESSO} dias
-    </p>
+    <hr style="border: 0; height: 1px; background: linear-gradient(to right, transparent, rgba(229,9,20,0.5), transparent); margin: 25px 0;">
 
     <div style="
-        margin-top: 18px;
-        padding: 15px;
-        background-color: rgba(255,255,255,0.03);
-        border-radius: 10px;
+        display: inline-block;
+        background: rgba(0, 255, 156, 0.1);
+        border: 1px solid rgba(0, 255, 156, 0.2);
+        padding: 8px 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
     ">
-        <p style="color: #ddd; margin: 0; font-size: 14px;">
-            Use seu agente e explore outros agentes da Central MuseIA durante o período
+        <span style="color: #00ff9c; font-weight: 700; font-size: 16px;">
+            ✓ {DIAS_ACESSO} Dias de Acesso Liberado
+        </span>
+    </div>
+
+    <div style="
+        padding: 20px;
+        background-color: rgba(255,255,255,0.03);
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,0.05);
+    ">
+        <p style="color: #ffffff; margin-bottom: 8px; font-size: 15px; font-weight: 600;">
+            Acesso à Central MuseIA
+        </p>
+        <p style="color: #aaa; margin: 0; font-size: 13px; line-height: 1.5;">
+            Use seu agente principal e explore <b>todos os outros robôs</b> da nossa inteligência durante o período.
         </p>
     </div>
 
-    <p style="
-        color: #888;
-        font-size: 12px;
-        margin-top: 15px;
-    ">
-        Sem assinatura • Ativação imediata
-    </p>
+    <div style="margin-top: 25px; display: flex; justify-content: center; gap: 15px;">
+        <span style="color: #777; font-size: 12px;">🔒 Pagamento Único</span>
+        <span style="color: #777; font-size: 12px;">•</span>
+        <span style="color: #777; font-size: 12px;">⚡ Ativação Via Pix</span>
+    </div>
 
 </div>
 """, unsafe_allow_html=True)
-
 # 4. LÓGICA DE CHECKOUT
 if not st.session_state.get("logado"):
     st.warning("Acesse sua conta para liberar o checkout.")
