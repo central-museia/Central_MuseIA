@@ -83,26 +83,70 @@ st.title("💳 Ative seu Acesso Premium")
 
 # Banner de Ancoragem de Preço
 st.markdown(f"""
-<div style="background-color: #1e1e1e; padding: 25px; border-radius: 12px; text-align: center; border: 1px solid #e50914; margin-bottom: 25px;">
-    
-    <p style="margin: 0; color: #888; text-decoration: line-through; font-size: 16px;">
-        De R$ {PRECO_REFERENCIA:.2f}
+<div style="
+    background: linear-gradient(135deg, #0f0f0f, #1c1c1c);
+    padding: 30px;
+    border-radius: 16px;
+    text-align: center;
+    border: 1px solid rgba(229,9,20,0.3);
+    margin-bottom: 30px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+">
+
+    <p style="
+        color: #e50914;
+        font-weight: bold;
+        letter-spacing: 1px;
+        font-size: 13px;
+        margin-bottom: 10px;
+    ">
+        PASSE MUSEIA
     </p>
 
-    <h2 style="margin: 5px 0; color: #fff; font-size: 34px;">
+    <h2 style="
+        color: white;
+        font-size: 42px;
+        margin: 0;
+        font-weight: 700;
+    ">
         R$ {PRECO_ACESSO:.2f}
     </h2>
 
-    <p style="color: #00ff00; font-weight: bold; margin-top: 5px;">
+    <p style="
+        color: #bbb;
+        font-size: 14px;
+        margin-top: 5px;
+        text-decoration: line-through;
+    ">
+        De R$ {PRECO_REFERENCIA:.2f}
+    </p>
+
+    <p style="
+        color: #00ff9c;
+        font-weight: 600;
+        margin-top: 12px;
+        font-size: 16px;
+    ">
         Acesso por {DIAS_ACESSO} dias
     </p>
 
-    <p style="color: #ccc; margin-top: 10px;">
-        Use seu agente e desbloqueie a Central MuseIA com outros agentes disponíveis durante o período.
-    </p>
+    <div style="
+        margin-top: 18px;
+        padding: 15px;
+        background-color: rgba(255,255,255,0.03);
+        border-radius: 10px;
+    ">
+        <p style="color: #ddd; margin: 0; font-size: 14px;">
+            Use seu agente e explore outros agentes da Central MuseIA durante o período
+        </p>
+    </div>
 
-    <p style="color: #aaa; font-size: 13px; margin-top: 8px;">
-        Sem assinatura • Acesso imediato
+    <p style="
+        color: #888;
+        font-size: 12px;
+        margin-top: 15px;
+    ">
+        Sem assinatura • Ativação imediata
     </p>
 
 </div>
