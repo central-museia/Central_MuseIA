@@ -5,6 +5,14 @@ import time
 from datetime import datetime, timedelta
 from database.cliente import get_client
 
+st.markdown("""
+<style>
+    .stApp {
+        background-color: #0e0e0e;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # --- CONFIGURAÇÃO DE NEGÓCIO ---
 PRECO_ACESSO = 49.90
 PRECO_REFERENCIA = 79.90  # apenas ancoragem visual
