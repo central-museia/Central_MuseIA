@@ -152,7 +152,7 @@ if st.session_state.processamento_liberado:
         col_run, col_clear = st.columns([1, 1])
         
         with col_run:
-    if st.button("🪄 Gerar Resultado Agora", use_container_width=True):
+        if st.button("🪄 Gerar Resultado Agora", use_container_width=True):
 
         # 🔒 TRAVA FINAL (não duplica, só garante)
         if not st.session_state.get("logado"):
