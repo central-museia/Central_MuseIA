@@ -142,10 +142,10 @@ if st.session_state.processamento_liberado:
     if "input_execucao" not in st.session_state:
         st.session_state.input_execucao = None
 
-    # =========================================
-    # MODO INPUT
-    # =========================================
-    if not st.session_state.resultado_gerado:
+# =========================================
+# MODO INPUT
+# =========================================
+if not st.session_state.resultado_gerado:
 
         arquivo_upload = st.file_uploader(
             "📂 Envie um arquivo (PDF, CSV ou TXT)", 
@@ -201,10 +201,10 @@ if st.session_state.processamento_liberado:
                     st.session_state.input_provisorio = ""
                     st.rerun()
 
-    # =========================================
-    # MODO RESULTADO
-    # =========================================
-    else:
+# =========================================
+# MODO RESULTADO
+# =========================================
+else:
         if st.session_state.executar_agora:
             executar_agente(st.session_state.input_execucao, regras, codigo_python)
             st.session_state.executar_agora = False
