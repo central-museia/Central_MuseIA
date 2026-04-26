@@ -135,24 +135,24 @@ if st.session_state.processamento_liberado:
         st.session_state.input_execucao = None
 
     # =========================================
-    # MODO INPUT (DENTRO DO BLOCO DE TRABALHO)
-    # =========================================
-    if not st.session_state.resultado_gerado:
-        arquivo_upload = st.file_uploader(
-            "📂 Envie um arquivo (PDF, CSV ou TXT)", 
-            type=["pdf", "csv", "txt"]
-        )
-        
-        dados_input = st.text_area(
-            "📋 Ou cole aqui as informações...", 
-            value=st.session_state.input_provisorio,
-            height=200
-        )
-        
-        col_run, col_clear = st.columns([1, 1])
-        
-        with col_run:
-            if st.button("🪄 Gerar Resultado Agora", use_container_width=True):
+# MODO INPUT (DENTRO DO BLOCO DE TRABALHO)
+# =========================================
+if not st.session_state.resultado_gerado:
+    arquivo_upload = st.file_uploader(
+        "📂 Envie um arquivo (PDF, CSV ou TXT)", 
+        type=["pdf", "csv", "txt"]
+    )
+    
+    dados_input = st.text_area(
+        "📋 Ou cole aqui as informações...", 
+        value=st.session_state.input_provisorio,
+        height=200
+    )
+    
+    col_run, col_clear = st.columns([1, 1])
+    
+    with col_run:
+        if st.button("🪄 Gerar Resultado Agora", use_container_width=True):
 
             # 🔒 TRAVA FINAL (não duplica, só garante)
             if not st.session_state.get("logado"):
@@ -181,7 +181,7 @@ if st.session_state.processamento_liberado:
                     st.session_state.resultado_gerado = True
                     st.session_state.input_provisorio = ""
                     st.rerun()
-
+                    
     # =========================================
     # MODO RESULTADO (DENTRO DO BLOCO DE TRABALHO)
     # =========================================
