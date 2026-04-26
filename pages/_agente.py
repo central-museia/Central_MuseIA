@@ -152,20 +152,35 @@ if st.session_state.processamento_liberado:
         col_run, col_clear = st.columns([1, 1])
         
         with col_run:
-            if st.button("🪄 Gerar Resultado Agora", use_container_width=True):
-                st.session_state.input_provisorio = dados_input
+    if st.button("🪄 Gerar Resultado Agora", use_container_width=True):
 
-                if not dados_input and not arquivo_upload:
-                    st.warning("Por favor, insira um texto ou envie um arquivo.")
-                else:
-                    with st.spinner("Processando..."):
-                        time.sleep(1)
-                        texto_para_processar = ler_arquivo(arquivo_upload) if arquivo_upload else dados_input
-                        st.session_state.input_execucao = texto_para_processar
-                        st.session_state.executar_agora = True
-                        st.session_state.resultado_gerado = True
-                        st.session_state.input_provisorio = ""
-                        st.rerun()
+        # 🔒 TRAVA FINAL (não duplica, só garante)
+        if not st.session_state.get("logado"):
+            st.session_state.origem = "pages/_agente.py"
+            st.warning("Faça login para gerar o resultado.")
+            st.switch_page("pages/login.py")
+            st.stop()
+
+        usuario = st.session_state.get("usuario", {})
+        if not usuario.get("ativo"):
+            st.error("⚠️ Plano inativo.")
+            st.switch_page("pages/pagamento.py")
+            st.stop()
+
+        # 👇 seu fluxo original (intacto)
+        st.session_state.input_provisorio = dados_input
+
+        if not dados_input and not arquivo_upload:
+            st.warning("Por favor, insira um texto ou envie um arquivo.")
+        else:
+            with st.spinner("Processando..."):
+                time.sleep(1)
+                texto_para_processar = ler_arquivo(arquivo_upload) if arquivo_upload else dados_input
+                st.session_state.input_execucao = texto_para_processar
+                st.session_state.executar_agora = True
+                st.session_state.resultado_gerado = True
+                st.session_state.input_provisorio = ""
+                st.rerun()
 
     # =========================================
     # MODO RESULTADO (DENTRO DO BLOCO DE TRABALHO)
