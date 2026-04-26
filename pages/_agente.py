@@ -143,48 +143,60 @@ if st.session_state.processamento_liberado:
         st.session_state.input_execucao = None
 
 # =========================================
-# MODO INPUT (VERSÃO ORIGINAL)
+# MODO INPUT
 # =========================================
 if not st.session_state.resultado_gerado:
+	arquivo_upload = st.file_uploader(
+		"📂 Envie um arquivo (PDF, CSV ou TXT)", 
+		type=["pdf", "csv", "txt"]
+	)
+	
+	# Corrigido o alinhamento aqui:
+	dados_input = st.text_area(
+		"📋 Ou cole aqui as informações...", 
+		value=st.session_state.input_provisorio,
+		height=200
+	)
+	
+	col_run, col_clear = st.columns([1, 1])
+	
+	with col_run:
+		if st.button("🪄 Gerar Resultado Agora", use_container_width=True):
+			st.session_state.input_provisorio = dados_input
 
-    arquivo_upload = st.file_uploader(
-        "📂 Envie um arquivo (PDF, CSV ou TXT)", 
-        type=["pdf", "csv", "txt"]
-    )
+			if not dados_input and not arquivo_upload:
+				st.warning("Por favor, insira um texto ou envie um arquivo.")
+				st.stop()
 
-    dados_input = st.text_area(
-        "📋 Ou cole aqui as informações...", 
-        value=st.session_state.input_provisorio,
-        height=200
-    )
+			if not st.session_state.get("logado"):
+				st.session_state.origem = "pages/_agente.py"
+				st.warning("Faça login para gerar o resultado.")
+				time.sleep(1)
+				st.switch_page("pages/login.py")
+				st.stop()
 
-    col_run, col_clear = st.columns([1, 1])
+			user = st.session_state.get("usuario")
+			if user:
+				hoje = datetime.now().date()
+				data_exp_str = user.get("data_expiracao")
+				try:
+					expiracao = datetime.strptime(data_exp_str, '%Y-%m-%d').date() if data_exp_str else hoje
+					if not user.get("ativo") or hoje > expiracao:
+						st.error("Seu acesso expirou.")
+						st.switch_page("pages/pagamento.py")
+						st.stop()
+				except:
+					st.error("Erro na validação.")
+					st.stop()
 
-    with col_run:
-        if st.button("🪄 Gerar Resultado Agora", use_container_width=True):
-
-            # 🔒 LOGIN (único bloqueio que existia)
-            if not st.session_state.get("logado"):
-                st.session_state.origem = "pages/_agente.py"
-                st.warning("Faça login para gerar o resultado.")
-                time.sleep(1)
-                st.switch_page("pages/login.py")
-                st.stop()
-
-            st.session_state.input_provisorio = dados_input
-
-            if not dados_input and not arquivo_upload:
-                st.warning("Por favor, insira um texto ou envie um arquivo.")
-                st.stop()
-
-            with st.spinner("Processando..."):
-                time.sleep(1)
-                texto_para_processar = ler_arquivo(arquivo_upload) if arquivo_upload else dados_input
-                st.session_state.input_execucao = texto_para_processar
-                st.session_state.executar_agora = True
-                st.session_state.resultado_gerado = True
-                st.session_state.input_provisorio = ""
-                st.rerun()
+			with st.spinner("Processando..."):
+				time.sleep(1)
+				texto_para_processar = ler_arquivo(arquivo_upload) if arquivo_upload else dados_input
+				st.session_state.input_execucao = texto_para_processar
+				st.session_state.executar_agora = True
+				st.session_state.resultado_gerado = True
+				st.session_state.input_provisorio = ""
+				st.rerun()
 
 # =========================================
 # MODO RESULTADO
