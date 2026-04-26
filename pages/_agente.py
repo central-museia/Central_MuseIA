@@ -100,13 +100,11 @@ if not st.session_state.processamento_liberado:
 # =========================================
 if st.session_state.processamento_liberado:
     
-    # 1. PEGA O STATUS
+    # 1. STATUS
     logado = st.session_state.get("logado", False)
     usuario = st.session_state.get("usuario", {})
     plano_ativo = usuario.get("ativo", False) if logado else False
 
-    # 2. LIMPEZA DE SEGURANÇA (Adicione isso aqui!)
-    # Se ele já está logado, a "origem" não deve mais existir para não bugar o login
     if logado:
         st.session_state.origem = None
 
@@ -115,97 +113,94 @@ if st.session_state.processamento_liberado:
         with col_aviso:
             st.warning("🔒 **Modo Visualização:** Faça login para processar arquivos.")
         with col_btn:
-            st.write("") 
-            if st.button("Fazer Login 🔑", use_container_width=True, key="btn_login_prev"):
+            st.write("")
+            if st.button("Fazer Login 🔑", use_container_width=True):
                 st.session_state.origem = "pages/_agente.py"
                 st.switch_page("pages/login.py")
-                st.stop() # <-- ADICIONE ISSO (Evita que o script tente rodar o resto)
+                st.stop()
 
     elif not plano_ativo:
         col_aviso, col_btn = st.columns([3, 1])
         with col_aviso:
             st.error("⚠️ **Plano Inativo:** Renove para gerar resultados.")
         with col_btn:
-            st.write("") 
-            if st.button("Renovar Plano 💳", use_container_width=True, key="btn_pag_prev"):
+            st.write("")
+            if st.button("Renovar Plano 💳", use_container_width=True):
                 st.switch_page("pages/pagamento.py")
-                st.stop() # <-- ADICIONE ISSO
+                st.stop()
     else:
         st.success(f"✅ **Tudo pronto!** Você está usando o robô: **{ag.get('nome')}**")
 
-    # --- CONFIGURAÇÕES DO AGENTE ---
+    # CONFIG
     regras = ag.get('regras_processamento', {})
     codigo_python = ag.get("codigo_python")
 
-    # Inicialização de estados (Mantenha o recuo!)
     if "resultado_gerado" not in st.session_state:
         st.session_state.resultado_gerado = False
     if "executar_agora" not in st.session_state:
         st.session_state.executar_agora = False
     if "input_execucao" not in st.session_state:
         st.session_state.input_execucao = None
-        
-# =========================================
-# MODO INPUT
-# =========================================
-if not st.session_state.resultado_gerado:
-    arquivo_upload = st.file_uploader(
-        "📂 Envie um arquivo (PDF, CSV ou TXT)", 
-        type=["pdf", "csv", "txt"]
-    )
-    
-    dados_input = st.text_area(
-        "📋 Ou cole aqui as informações...", 
-        value=st.session_state.input_provisorio,
-        height=200
-    )
-    
-    col_run, col_clear = st.columns([1, 1])
-    
-    with col_run:
-        if st.button("🪄 Gerar Resultado Agora", use_container_width=True):
 
-            # 🔒 BLOQUEIO REAL (LOGIN)
-            if not st.session_state.get("logado"):
-                st.session_state.origem = "pages/_agente.py"
-                st.warning("Faça login para gerar o resultado.")
-                st.switch_page("pages/login.py")
-                st.stop()
+    # =========================================
+    # MODO INPUT
+    # =========================================
+    if not st.session_state.resultado_gerado:
 
-            # 🔒 BLOQUEIO REAL (PLANO)
-            user = st.session_state.get("usuario")
-            if user:
-                hoje = datetime.now().date()
-                data_exp_str = user.get("data_expiracao")
+        arquivo_upload = st.file_uploader(
+            "📂 Envie um arquivo (PDF, CSV ou TXT)", 
+            type=["pdf", "csv", "txt"]
+        )
 
-                try:
-                    expiracao = datetime.strptime(data_exp_str, '%Y-%m-%d').date() if data_exp_str else hoje
+        dados_input = st.text_area(
+            "📋 Ou cole aqui as informações...", 
+            value=st.session_state.input_provisorio,
+            height=200
+        )
 
-                    if not user.get("ativo") or hoje > expiracao:
-                        st.error("⚠️ Plano inativo ou expirado.")
-                        st.switch_page("pages/pagamento.py")
-                        st.stop()
+        col_run, col_clear = st.columns([1, 1])
 
-                except:
-                    st.error("Erro na validação.")
+        with col_run:
+            if st.button("🪄 Gerar Resultado Agora", use_container_width=True):
+
+                # 🔒 LOGIN
+                if not st.session_state.get("logado"):
+                    st.session_state.origem = "pages/_agente.py"
+                    st.warning("Faça login para gerar o resultado.")
+                    st.switch_page("pages/login.py")
                     st.stop()
 
-            # 📥 INPUT
-            st.session_state.input_provisorio = dados_input
+                # 🔒 PLANO
+                user = st.session_state.get("usuario")
+                if user:
+                    hoje = datetime.now().date()
+                    data_exp_str = user.get("data_expiracao")
 
-            if not dados_input and not arquivo_upload:
-                st.warning("Por favor, insira um texto ou envie um arquivo.")
-                st.stop()
+                    try:
+                        expiracao = datetime.strptime(data_exp_str, '%Y-%m-%d').date() if data_exp_str else hoje
 
-            # ⚙️ PROCESSAMENTO
-            with st.spinner("Processando..."):
-                time.sleep(1)
-                texto_para_processar = ler_arquivo(arquivo_upload) if arquivo_upload else dados_input
-                st.session_state.input_execucao = texto_para_processar
-                st.session_state.executar_agora = True
-                st.session_state.resultado_gerado = True
-                st.session_state.input_provisorio = ""
-                st.rerun()
+                        if not user.get("ativo") or hoje > expiracao:
+                            st.error("⚠️ Plano inativo ou expirado.")
+                            st.switch_page("pages/pagamento.py")
+                            st.stop()
+
+                    except:
+                        st.error("Erro na validação.")
+                        st.stop()
+
+                if not dados_input and not arquivo_upload:
+                    st.warning("Por favor, insira um texto ou envie um arquivo.")
+                    st.stop()
+
+                with st.spinner("Processando..."):
+                    time.sleep(1)
+                    texto_para_processar = ler_arquivo(arquivo_upload) if arquivo_upload else dados_input
+                    st.session_state.input_execucao = texto_para_processar
+                    st.session_state.executar_agora = True
+                    st.session_state.resultado_gerado = True
+                    st.session_state.input_provisorio = ""
+                    st.rerun()
+
     # =========================================
     # MODO RESULTADO
     # =========================================
@@ -219,7 +214,6 @@ if not st.session_state.resultado_gerado:
             st.session_state.resultado_gerado = False
             st.session_state.executar_agora = False
             st.rerun()
-
 # =========================================
 # BOTÃO VOLTAR
 # =========================================
