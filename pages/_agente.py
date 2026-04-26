@@ -45,7 +45,7 @@ if "processamento_liberado" not in st.session_state:
 # =========================================
 # EXIBIÇÃO DO AGENTE (DESIGN LIMPO)
 # =========================================
-col_img, col_txt = st.columns([1, 2])  # imagem menor, texto maior
+col_img, col_txt = st.columns([1, 2])
 
 BASE_URL = "https://lmlfeizxwnhqebotfzsm.supabase.co/storage/v1/object/public/museia-assets/"
 
@@ -57,7 +57,6 @@ def imagem_valida(url):
         return False
 
 url_img = ag.get("url_publica")
-
 if url_img and not url_img.startswith("http"):
     url_img = BASE_URL + url_img
 
@@ -73,11 +72,8 @@ with col_txt:
     st.title(ag.get("nome"))
     st.write(ag.get("descricao"))
 
-# =========================================
-# EXIBIÇÃO DINÂMICA DE BENEFÍCIOS
-# =========================================
+# BENEFÍCIOS
 conteudo_beneficios = ag.get("beneficios")
-
 if conteudo_beneficios:
     st.markdown(f"### ⚡ Benefícios do {ag.get('nome')}")
     lista_beneficios = [b.strip() for b in conteudo_beneficios.split("|") if b.strip()]
@@ -87,16 +83,14 @@ else:
     st.markdown("### ⚡ Benefícios")
     st.markdown("- Entrega de alta performance\n- Padrão de qualidade MuseIA")
 
-# =========================================
 # BOTÃO DE AÇÃO
-# =========================================
 if not st.session_state.processamento_liberado:
     if st.button("🚀 Usar este agente", use_container_width=True, key=f"btn_usar_{ag.get('id')}"):
         st.session_state.processamento_liberado = True
         st.rerun()
 
 # =========================================
-# ÁREA DE TRABALHO
+# ÁREA DE TRABALHO (REAJUSTADA)
 # =========================================
 if st.session_state.processamento_liberado:
     
@@ -113,7 +107,6 @@ if st.session_state.processamento_liberado:
         with col_aviso:
             st.warning("🔒 **Modo Visualização:** Faça login para processar arquivos.")
         with col_btn:
-            st.write("")
             if st.button("Fazer Login 🔑", use_container_width=True):
                 st.session_state.origem = "pages/_agente.py"
                 st.switch_page("pages/login.py")
@@ -124,14 +117,13 @@ if st.session_state.processamento_liberado:
         with col_aviso:
             st.error("⚠️ **Plano Inativo:** Renove para gerar resultados.")
         with col_btn:
-            st.write("")
             if st.button("Renovar Plano 💳", use_container_width=True):
                 st.switch_page("pages/pagamento.py")
                 st.stop()
     else:
         st.success(f"✅ **Tudo pronto!** Você está usando o robô: **{ag.get('nome')}**")
 
-    # CONFIG
+    # CONFIG (VARIÁVEIS QUE O INPUT PRECISA)
     regras = ag.get('regras_processamento', {})
     codigo_python = ag.get("codigo_python")
 
@@ -142,85 +134,63 @@ if st.session_state.processamento_liberado:
     if "input_execucao" not in st.session_state:
         st.session_state.input_execucao = None
 
-# =========================================
-# MODO INPUT
-# =========================================
-if not st.session_state.resultado_gerado:
-	arquivo_upload = st.file_uploader(
-		"📂 Envie um arquivo (PDF, CSV ou TXT)", 
-		type=["pdf", "csv", "txt"]
-	)
-	
-	# Corrigido o alinhamento aqui:
-	dados_input = st.text_area(
-		"📋 Ou cole aqui as informações...", 
-		value=st.session_state.input_provisorio,
-		height=200
-	)
-	
-	col_run, col_clear = st.columns([1, 1])
-	
-	with col_run:
-		if st.button("🪄 Gerar Resultado Agora", use_container_width=True):
-			st.session_state.input_provisorio = dados_input
+    # =========================================
+    # MODO INPUT (DENTRO DO BLOCO DE TRABALHO)
+    # =========================================
+    if not st.session_state.resultado_gerado:
+        arquivo_upload = st.file_uploader(
+            "📂 Envie um arquivo (PDF, CSV ou TXT)", 
+            type=["pdf", "csv", "txt"]
+        )
+        
+        dados_input = st.text_area(
+            "📋 Ou cole aqui as informações...", 
+            value=st.session_state.input_provisorio,
+            height=200
+        )
+        
+        col_run, col_clear = st.columns([1, 1])
+        
+        with col_run:
+            if st.button("🪄 Gerar Resultado Agora", use_container_width=True):
+                st.session_state.input_provisorio = dados_input
 
-			if not dados_input and not arquivo_upload:
-				st.warning("Por favor, insira um texto ou envie um arquivo.")
-				st.stop()
+                if not dados_input and not arquivo_upload:
+                    st.warning("Por favor, insira um texto ou envie um arquivo.")
+                else:
+                    with st.spinner("Processando..."):
+                        time.sleep(1)
+                        texto_para_processar = ler_arquivo(arquivo_upload) if arquivo_upload else dados_input
+                        st.session_state.input_execucao = texto_para_processar
+                        st.session_state.executar_agora = True
+                        st.session_state.resultado_gerado = True
+                        st.session_state.input_provisorio = ""
+                        st.rerun()
 
-			if not st.session_state.get("logado"):
-				st.session_state.origem = "pages/_agente.py"
-				st.warning("Faça login para gerar o resultado.")
-				time.sleep(1)
-				st.switch_page("pages/login.py")
-				st.stop()
+    # =========================================
+    # MODO RESULTADO (DENTRO DO BLOCO DE TRABALHO)
+    # =========================================
+    else:
+        if st.session_state.executar_agora:
+            executar_agente(st.session_state.input_execucao, regras, codigo_python)
+            st.session_state.executar_agora = False
+            st.success("Resultado gerado!")
 
-			user = st.session_state.get("usuario")
-			if user:
-				hoje = datetime.now().date()
-				data_exp_str = user.get("data_expiracao")
-				try:
-					expiracao = datetime.strptime(data_exp_str, '%Y-%m-%d').date() if data_exp_str else hoje
-					if not user.get("ativo") or hoje > expiracao:
-						st.error("Seu acesso expirou.")
-						st.switch_page("pages/pagamento.py")
-						st.stop()
-				except:
-					st.error("Erro na validação.")
-					st.stop()
-
-			with st.spinner("Processando..."):
-				time.sleep(1)
-				texto_para_processar = ler_arquivo(arquivo_upload) if arquivo_upload else dados_input
-				st.session_state.input_execucao = texto_para_processar
-				st.session_state.executar_agora = True
-				st.session_state.resultado_gerado = True
-				st.session_state.input_provisorio = ""
-				st.rerun()
+        if st.button("🔄 Gerar novo resultado", use_container_width=True):
+            st.session_state.resultado_gerado = False
+            st.session_state.executar_agora = False
+            st.rerun()
 
 # =========================================
-# MODO RESULTADO
-# =========================================
-else:
-	if st.session_state.executar_agora:
-		executar_agente(st.session_state.input_execucao, regras, codigo_python)
-		st.session_state.executar_agora = False
-		st.success("Resultado gerado!")
-
-	if st.button("🔄 Gerar novo resultado", use_container_width=True):
-		st.session_state.resultado_gerado = False
-		st.session_state.executar_agora = False
-		st.rerun()
-# =========================================
-# BOTÃO VOLTAR
+# BOTÃO VOLTAR (FORA DO BLOCO DE TRABALHO)
 # =========================================
 st.write("") 
 
 if st.button("⬅ Voltar para Galeria", key="btn_voltar_unico"):
-    # Limpeza total para o próximo agente não herdar nada
     st.session_state.agente_selecionado = None 
     st.session_state.processamento_liberado = False
     st.session_state.resultado_gerado = False
     st.session_state.resultado_final = None
     st.session_state.input_provisorio = "" 
     st.switch_page("pages/agentes.py")
+
