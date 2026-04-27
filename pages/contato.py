@@ -54,6 +54,18 @@ st.divider()
 st.subheader("✉️ Enviar mensagem")
 
 with st.form("form_contato"):
+    assunto = st.selectbox(
+        "Como podemos te ajudar?",
+        [
+            "Suporte Técnico (Erro ou Acesso)",
+            "Financeiro / Pagamentos",
+            "Dúvidas sobre os Agentes",
+            "Parcerias e Afiliados",
+            "Trabalhe Conosco",
+            "Sugestões de novos Robôs",
+            "Outros"
+        ]
+    )
     nome = st.text_input("Seu nome")
     email = st.text_input("Seu e-mail")
     mensagem = st.text_area("Mensagem", height=150)
