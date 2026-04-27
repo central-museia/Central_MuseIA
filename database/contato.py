@@ -10,6 +10,10 @@ def get_client():
     url = st.secrets["supabase"]["url"]
     key = st.secrets["supabase"]["anon_key"]
     return create_client(url, key)
+    
+    except Exception:
+    st.error("Erro de Configuração: Chaves do Supabase não encontradas.")
+    st.stop()
 
 # 💾 INSERT
 def inserir_mensagem_contato(nome, email, assunto, mensagem):
