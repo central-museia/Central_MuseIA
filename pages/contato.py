@@ -1,4 +1,5 @@
 import streamlit as st
+from database.contato import inserir_mensagem
 
 # Configuração da página
 st.set_page_config(page_title="Fale Conosco | MuseIA", layout="wide")
