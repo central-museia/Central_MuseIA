@@ -34,11 +34,6 @@ def inserir_mensagem_contato(nome, email, assunto, mensagem):
         st.error(f"Erro técnico: {e}")
         return False
 
-    except Exception as e:
-        st.error(f"Erro técnico: {e}")
-        return False
-
-
 # 🎨 UI
 st.title("📩 Fale Conosco")
 st.write("Nos envie uma mensagem e retornaremos o mais rápido possível.")
