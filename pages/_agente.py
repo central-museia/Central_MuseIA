@@ -161,11 +161,12 @@ if st.session_state.processamento_liberado:
                     st.switch_page("pages/login.py")
                     st.stop()
 
-                usuario = st.session_state.get("usuario", {})
-                if not usuario.get("ativo"):
-                    st.error("⚠️ Plano inativo.")
-                    st.switch_page("pages/pagamento.py")
-                    st.stop()
+                status = usuario.get("status_pagamento")
+
+                if status != "ativo":
+                        st.error("⚠️ Seu acesso não está ativo.")
+                        st.switch_page("pages/pagamento.py")
+                        st.stop()
 
                 st.session_state.input_provisorio = dados_input
 
