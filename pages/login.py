@@ -54,7 +54,6 @@ with aba_cadastro:
         st.subheader("Crie sua conta na MuseIA")
         
         novo_nome = st.text_input("Nome Completo", placeholder="Ex: Deise Maria")
-        # Usamos o .strip().lower() aqui para garantir o formato que o Supabase exige
         novo_email = st.text_input("E-mail", placeholder="seu@email.com").strip().lower()
         
         nova_senha = st.text_input("Crie uma Senha", type="password", help="Mínimo de 6 caracteres")
@@ -63,7 +62,6 @@ with aba_cadastro:
         btn_cadastrar = st.form_submit_button("Criar minha Conta", use_container_width=True)
         
         if btn_cadastrar:
-            # 1. Validações básicas de interface
             if not novo_nome or not novo_email or not nova_senha:
                 st.warning("Por favor, preencha todos os campos.")
             
@@ -74,17 +72,17 @@ with aba_cadastro:
                 st.warning("A senha deve ter no mínimo 6 caracteres.")
             
             else:
-                # 2. Chamada da função (Certifique-se que ela captura o ID do Auth como discutimos)
-                with st.spinner("Processando seu cadastro..."):
+                with st.spinner("Conectando ao servidor..."):
+                    # Aqui chamamos a função que faz o vínculo ID Auth -> Tabela Usuarios
                     sucesso, msg = cadastrar_usuario(novo_nome, novo_email, nova_senha)
                 
                 if sucesso:
-                    st.success("✅ Conta criada com sucesso! Agora você pode fazer login na aba ao lado.")
-                    # Opcional: st.balloons() para comemorar o novo usuário
+                    st.success("✅ Conta criada! Por favor, faça o login na aba 'Entrar'.")
+                    st.balloons()
                 else:
-                    # Se o erro for de RLS (42501), a mensagem virá detalhada aqui
-                    st.error(f"Não foi possível concluir o cadastro: {msg}")
-
+                    # Se o erro for RLS, ele aparecerá aqui para sabermos
+                    st.error(f"Erro técnico: {msg}")
+                    
 # --- ABA DE RECUPERAÇÃO ---
 with aba_recuperar:
     st.write("Enviaremos instruções para o seu e-mail cadastrado.")
