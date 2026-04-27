@@ -1,4 +1,3 @@
-from database.contato import inserir_mensagem
 import streamlit as st
 
 # Configuração da página
