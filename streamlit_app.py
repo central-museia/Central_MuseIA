@@ -208,8 +208,13 @@ def minha_home():
     for item in faqs:
         with st.expander(item["pergunta"]):
             st.write(item["resposta"])
+    # Adicione isso logo após o loop do FAQ
+    st.write("---")
+    st.write("### Ainda tem dúvidas?")
+    if st.button("Fale com nosso Suporte 📩", use_container_width=True):
+        st.switch_page(pag_contato) # Aqui usamos a variável que definimos no passo 3
 
-    # FOOTER
+        # FOOTER
     st.divider()
     st.caption("MuseIA@2026 - Brasil 🇧🇷")
 
@@ -223,6 +228,7 @@ pag_agentes = st.Page("pages/agentes.py", title="Agentes", icon="🤖")
 pag_login = st.Page("pages/login.py", title="Login", icon="🔑")
 pag_pagamento = st.Page("pages/pagamento.py", title="Pagamento", icon="💳")
 pag_redefinir = st.Page("pages/redefinir.py", title="Mudar minha senha", icon="🛡️")
+pag_contato = st.Page("pages/contato.py", title="Fale Conosco", icon="📩")
 
 # Esta é a página que o botão "Abrir" precisa, mas que não vai ter título no menu
 pag_detalhes = st.Page("pages/_agente.py", title="Detalhes do Agente")
@@ -234,7 +240,8 @@ pag_detalhes = st.Page("pages/_agente.py", title="Detalhes do Agente")
 pg = st.navigation({
     "Principal": [
         pag_home, 
-        pag_agentes
+        pag_agentes,
+        pag_contato
     ],
     "Minha Conta": [
         pag_login,
