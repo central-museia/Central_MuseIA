@@ -53,29 +53,21 @@ st.divider()
 # --- FORMULÁRIO DE CONTATO ---
 st.subheader("✉️ Enviar mensagem")
 
-email_destino = "contato.museia@gmail.com"
+with st.form("form_contato"):
+    nome = st.text_input("Seu nome")
+    email = st.text_input("Seu e-mail")
+    mensagem = st.text_area("Mensagem", height=150)
 
-form_html = f"""
-    <form action="https://formsubmit.co/{email_destino}" method="POST">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_template" value="table">
-        
-        <label style="font-weight: bold;">Seu nome</label><br>
-        <input type="text" name="name" class="st-form-input" placeholder="Ex: Deise Maria" required>
-        
-        <label style="font-weight: bold;">Seu e-mail</label><br>
-        <input type="email" name="email" class="st-form-input" placeholder="seuemail@exemplo.com" required>
-        
-        <label style="font-weight: bold;">Mensagem</label><br>
-        <textarea name="message" class="st-form-input" rows="5" placeholder="Como podemos te ajudar?" required style="height: 150px;"></textarea>
-        
-        <button type="submit" style="background-color: #ff4b4b; color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; font-size: 1.1rem;">
-            Enviar Mensagem Agora 🚀
-        </button>
-    </form>
-"""
+    enviar = st.form_submit_button("Enviar mensagem 🚀")
+
+    if enviar:
+        if not nome or not email or not mensagem:
+            st.warning("Preencha todos os campos.")
+        else:
+            # Aqui você pode integrar depois com API, email, etc
+            st.success("Mensagem enviada com sucesso! Retornaremos em breve.")
 
 st.markdown(form_html, unsafe_allow_html=True)
 
 st.write("")
-st.caption("MuseIA Digital - Tecnologia para quem faz.")
+st.caption("MuseIA Digital - A inteligência humana que controla a IA.")
