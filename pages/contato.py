@@ -1,74 +1,81 @@
 import streamlit as st
 
-# CONFIG
+# Configuração da página
 st.set_page_config(page_title="Fale Conosco | MuseIA", layout="wide")
 
-# 🎨 ESTILO MUSEIA (mais limpo e profissional)
+# Estilização ajustada para Dark Mode
 st.markdown("""
-<style>
-.main .block-container {
-    max-width: 900px;
-    padding-top: 2rem;
-}
-
-.card {
-    background-color: #ffffff;
-    padding: 25px;
-    border-radius: 12px;
-    border: 1px solid #e6e6e6;
-    margin-bottom: 20px;
-}
-
-.highlight {
-    border-left: 5px solid #6C63FF;
-    background-color: #f7f7ff;
-}
-
-.title {
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-
-.subtitle {
-    color: #666;
-    margin-bottom: 20px;
-}
-</style>
+    <style>
+        .main .block-container {
+            max-width: 900px;
+            padding-top: 2rem;
+        }
+        /* Box de informações com texto escuro garantido */
+        .info-box {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 8px solid #ff4b4b;
+            margin-bottom: 30px;
+            color: #1f1f1f !important; /* Força o texto a ficar escuro */
+        }
+        .info-box p {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #1f1f1f !important;
+        }
+        /* Estilo dos inputs para combinar com o tema dark */
+        .st-form-input {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid #444;
+            padding: 12px;
+            margin-bottom: 20px;
+            background-color: #262730;
+            color: white;
+        }
+    </style>
 """, unsafe_allow_html=True)
 
-# HEADER
-st.markdown('<div class="title">📩 Fale com a MuseIA</div>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">Precisa de ajuda, suporte ou quer falar com a gente? Responda rápido e direto.</div>', unsafe_allow_html=True)
+st.title("📩 Fale com a MuseIA")
+st.write("Precisa de ajuda, suporte ou quer falar com a gente? Responda rápido e direto.")
 
-# INFO
-st.markdown("""
-<div class="card highlight">
-    <strong>🕒 Atendimento:</strong> Segunda a Sexta, das 08h às 16h<br><br>
-    <strong>📧 E-mail:</strong> contato.museia@gmail.com
-</div>
+# --- SEÇÃO DE INFORMAÇÕES (TEXTO CORRIGIDO) ---
+st.markdown(f"""
+    <div class="info-box">
+        <p><strong>🕒 Horário de Atendimento:</strong> Segunda a Sexta, das 08h às 16h.</p>
+        <p><strong>📧 E-mail Direto:</strong> <a href="mailto:contato.museia@gmail.com" style="color: #ff4b4b; text-decoration: none; font-weight: bold;">contato.museia@gmail.com</a></p>
+    </div>
 """, unsafe_allow_html=True)
 
-# DIVISOR
 st.divider()
 
-# FORMULÁRIO NATIVO (MUITO MAIS ESTÁVEL)
+# --- FORMULÁRIO DE CONTATO ---
 st.subheader("✉️ Enviar mensagem")
 
-with st.form("form_contato"):
-    nome = st.text_input("Seu nome")
-    email = st.text_input("Seu e-mail")
-    mensagem = st.text_area("Mensagem", height=150)
+email_destino = "contato.museia@gmail.com"
 
-    enviar = st.form_submit_button("Enviar mensagem 🚀")
+form_html = f"""
+    <form action="https://formsubmit.co/{email_destino}" method="POST">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        
+        <label style="font-weight: bold;">Seu nome</label><br>
+        <input type="text" name="name" class="st-form-input" placeholder="Ex: Deise Maria" required>
+        
+        <label style="font-weight: bold;">Seu e-mail</label><br>
+        <input type="email" name="email" class="st-form-input" placeholder="seuemail@exemplo.com" required>
+        
+        <label style="font-weight: bold;">Mensagem</label><br>
+        <textarea name="message" class="st-form-input" rows="5" placeholder="Como podemos te ajudar?" required style="height: 150px;"></textarea>
+        
+        <button type="submit" style="background-color: #ff4b4b; color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; font-size: 1.1rem;">
+            Enviar Mensagem Agora 🚀
+        </button>
+    </form>
+"""
 
-    if enviar:
-        if not nome or not email or not mensagem:
-            st.warning("Preencha todos os campos.")
-        else:
-            # Aqui você pode integrar depois com API, email, etc
-            st.success("Mensagem enviada com sucesso! Retornaremos em breve.")
+st.markdown(form_html, unsafe_allow_html=True)
 
-# RODAPÉ
-st.divider()
-st.caption("MuseIA Digital • Inteligência aplicada para decisões reais")
+st.write("")
+st.caption("MuseIA Digital - Tecnologia para quem faz.")
