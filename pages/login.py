@@ -50,25 +50,40 @@ if st.session_state.get("logado"):
     
 # --- ABA DE CADASTRO ---
 with aba_cadastro:
-    with st.form("cadastro_form"):
-        novo_nome = st.text_input("Nome Completo")
-        novo_email = st.text_input("E-mail").lower().strip()
-        nova_senha = st.text_input("Crie uma Senha", type="password")
+    with st.form("cadastro_form", clear_on_submit=False):
+        st.subheader("Crie sua conta na MuseIA")
+        
+        novo_nome = st.text_input("Nome Completo", placeholder="Ex: Deise Maria")
+        # Usamos o .strip().lower() aqui para garantir o formato que o Supabase exige
+        novo_email = st.text_input("E-mail", placeholder="seu@email.com").strip().lower()
+        
+        nova_senha = st.text_input("Crie uma Senha", type="password", help="Mínimo de 6 caracteres")
         confirma_senha = st.text_input("Confirme a Senha", type="password")
         
-        btn_cadastrar = st.form_submit_button("Criar minha Conta")
+        btn_cadastrar = st.form_submit_button("Criar minha Conta", use_container_width=True)
         
         if btn_cadastrar:
-            if nova_senha != confirma_senha:
+            # 1. Validações básicas de interface
+            if not novo_nome or not novo_email or not nova_senha:
+                st.warning("Por favor, preencha todos os campos.")
+            
+            elif nova_senha != confirma_senha:
                 st.error("As senhas não conferem.")
+            
             elif len(nova_senha) < 6:
                 st.warning("A senha deve ter no mínimo 6 caracteres.")
+            
             else:
-                sucesso, msg = cadastrar_usuario(novo_nome, novo_email, nova_senha)
+                # 2. Chamada da função (Certifique-se que ela captura o ID do Auth como discutimos)
+                with st.spinner("Processando seu cadastro..."):
+                    sucesso, msg = cadastrar_usuario(novo_nome, novo_email, nova_senha)
+                
                 if sucesso:
-                    st.success("Conta criada! Agora você pode fazer login.")
+                    st.success("✅ Conta criada com sucesso! Agora você pode fazer login na aba ao lado.")
+                    # Opcional: st.balloons() para comemorar o novo usuário
                 else:
-                    st.error(f"Erro ao cadastrar: {msg}")
+                    # Se o erro for de RLS (42501), a mensagem virá detalhada aqui
+                    st.error(f"Não foi possível concluir o cadastro: {msg}")
 
 # --- ABA DE RECUPERAÇÃO ---
 with aba_recuperar:
