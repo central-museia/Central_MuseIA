@@ -16,13 +16,13 @@ except Exception:
     st.stop()
 
 # 💾 INSERT
-def inserir_mensagem_contato(nome, email, assunto, mensagem):
+def inserir_mensagem(nome, email, assunto, mensagem):
     try:
         supabase = get_client()
 
         dados = {
             "nome": nome,
-            "email": email,
+            "email": email.strip().lower(),
             "assunto": assunto,
             "mensagem": mensagem,
             "status": "Pendente"
