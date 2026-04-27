@@ -1,67 +1,74 @@
 import streamlit as st
 
-# Configuração da página
+# CONFIG
 st.set_page_config(page_title="Fale Conosco | MuseIA", layout="wide")
 
-# Estilização para manter o padrão MuseIA
+# 🎨 ESTILO MUSEIA (mais limpo e profissional)
 st.markdown("""
-    <style>
-        .main .block-container {
-            max-width: 800px;
-            padding-top: 2rem;
-        }
-        .info-box {
-            background-color: #f0f2f6;
-            padding: 20px;
-            border-radius: 10px;
-            border-left: 5px solid #ff4b4b;
-            margin-bottom: 25px;
-        }
-    </style>
+<style>
+.main .block-container {
+    max-width: 900px;
+    padding-top: 2rem;
+}
+
+.card {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid #e6e6e6;
+    margin-bottom: 20px;
+}
+
+.highlight {
+    border-left: 5px solid #6C63FF;
+    background-color: #f7f7ff;
+}
+
+.title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #666;
+    margin-bottom: 20px;
+}
+</style>
 """, unsafe_allow_html=True)
 
-st.title("📩 Fale Conosco")
-st.write("Dúvidas, sugestões ou suporte técnico? Nossa equipe está pronta para ajudar.")
+# HEADER
+st.markdown('<div class="title">📩 Fale com a MuseIA</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">Precisa de ajuda, suporte ou quer falar com a gente? Responda rápido e direto.</div>', unsafe_allow_html=True)
 
-# --- SEÇÃO DE INFORMAÇÕES ---
-st.markdown(f"""
-    <div class="info-box">
-        <p><strong>🕒 Horário de Atendimento:</strong> Segunda a Sexta, das 08h às 16h.</p>
-        <p><strong>📧 E-mail Direto:</strong> <a href="mailto:contato.museia@gmail.com">contato.museia@gmail.com</a></p>
-    </div>
+# INFO
+st.markdown("""
+<div class="card highlight">
+    <strong>🕒 Atendimento:</strong> Segunda a Sexta, das 08h às 16h<br><br>
+    <strong>📧 E-mail:</strong> contato.museia@gmail.com
+</div>
 """, unsafe_allow_html=True)
 
+# DIVISOR
 st.divider()
 
-# --- FORMULÁRIO DE CONTATO ---
-st.subheader("Enviar Mensagem")
+# FORMULÁRIO NATIVO (MUITO MAIS ESTÁVEL)
+st.subheader("✉️ Enviar mensagem")
 
-# Usando FormSubmit para direcionar ao seu e-mail
-# Substitua pelo seu e-mail oficial
-email_destino = "contato.museia@gmail.com"
+with st.form("form_contato"):
+    nome = st.text_input("Seu nome")
+    email = st.text_input("Seu e-mail")
+    mensagem = st.text_area("Mensagem", height=150)
 
-form_html = f"""
-    <form action="https://formsubmit.co/{email_destino}" method="POST">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_next" value="https://museia.streamlit.app/contato"> 
-        
-        <label>Seu Nome:</label><br>
-        <input type="text" name="name" placeholder="Como podemos te chamar?" required style="width: 100%; border-radius: 5px; border: 1px solid #ccc; padding: 10px; margin-bottom: 15px;">
-        
-        <label>Seu E-mail:</label><br>
-        <input type="email" name="email" placeholder="Para onde enviamos a resposta?" required style="width: 100%; border-radius: 5px; border: 1px solid #ccc; padding: 10px; margin-bottom: 15px;">
-        
-        <label>Mensagem:</label><br>
-        <textarea name="message" placeholder="Descreva como podemos te ajudar..." required style="width: 100%; height: 150px; border-radius: 5px; border: 1px solid #ccc; padding: 10px; margin-bottom: 15px;"></textarea>
-        
-        <button type="submit" style="background-color: #ff4b4b; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold;">
-            Enviar Mensagem 🚀
-        </button>
-    </form>
-"""
+    enviar = st.form_submit_button("Enviar mensagem 🚀")
 
-st.markdown(form_html, unsafe_allow_html=True)
+    if enviar:
+        if not nome or not email or not mensagem:
+            st.warning("Preencha todos os campos.")
+        else:
+            # Aqui você pode integrar depois com API, email, etc
+            st.success("Mensagem enviada com sucesso! Retornaremos em breve.")
 
-# Rodapé simples
-st.write("")
-st.caption("MuseIA Digital - Inteligência Artificial para Empreendedores.")
+# RODAPÉ
+st.divider()
+st.caption("MuseIA Digital • Inteligência aplicada para decisões reais")
