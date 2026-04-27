@@ -67,7 +67,5 @@ with st.form("form_contato"):
             # Aqui você pode integrar depois com API, email, etc
             st.success("Mensagem enviada com sucesso! Retornaremos em breve.")
 
-st.markdown(form_html, unsafe_allow_html=True)
-
 st.write("")
 st.caption("MuseIA Digital - A inteligência humana que controla a IA.")
