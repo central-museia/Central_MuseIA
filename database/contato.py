@@ -1,20 +1,20 @@
-import streamlit as st
 from supabase import create_client
+import streamlit as st
+
 
 # 🔧 CONFIG
 st.set_page_config(page_title="Fale Conosco | MuseIA", layout="centered")
 
 # 🔌 CONEXÃO
-def get_supabase():
-    return create_client(
-        st.secrets["SUPABASE_URL"],
-        st.secrets["SUPABASE_KEY"]
-    )
+def get_client():
+    url = st.secrets["supabase"]["url"]
+    key = st.secrets["supabase"]["anon_key"]
+    return create_client(url, key)
 
 # 💾 INSERT
-def inserir_mensagem(nome, email, assunto, mensagem):
+def inserir_mensagem_contato(nome, email, assunto, mensagem):
     try:
-        supabase = get_supabase()
+        supabase = get_client()
 
         dados = {
             "nome": nome,
@@ -26,11 +26,13 @@ def inserir_mensagem(nome, email, assunto, mensagem):
 
         resposta = supabase.table("fale_conosco").insert(dados).execute()
 
-        if resposta.data:
-            return True
-        else:
-            st.error(f"Erro ao salvar: {resposta}")
-            return False
+        st.write(resposta)  # 👈 diagnóstico real
+
+        return bool(resposta.data)
+
+    except Exception as e:
+        st.error(f"Erro técnico: {e}")
+        return False
 
     except Exception as e:
         st.error(f"Erro técnico: {e}")
