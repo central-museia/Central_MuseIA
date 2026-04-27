@@ -1,4 +1,4 @@
-from supabase import create_client
+from supabase import inserir_mensagem
 import streamlit as st
 
 
