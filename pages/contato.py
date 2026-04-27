@@ -76,8 +76,28 @@ with st.form("form_contato"):
         if not nome or not email or not mensagem:
             st.warning("Preencha todos os campos.")
         else:
-            # Aqui você pode integrar depois com API, email, etc
-            st.success("Mensagem enviada com sucesso! Retornaremos em breve.")
-
+            with st.spinner("Enviando sua mensagem..."):
+                # Preparamos os dados exatamente como as colunas do banco
+                dados_contato = {
+                    "nome": nome,
+                    "email": email.strip().lower(),
+                    "assunto": assunto,
+                    "mensagem": mensagem,
+                    "status": "Pendente" # Para você gerenciar depois
+                }
+                
+                try:
+                    from database.cliente import get_client
+                    supabase = get_client()
+                    
+                    # Tenta inserir na tabela fale_conosco
+                    resultado = supabase.table("fale_conosco").insert(dados_contato).execute()
+                    
+                    st.success("✅ Mensagem enviada com sucesso! Retornaremos em breve.")
+                    st.balloons()
+                except Exception as e:
+                    # Se der erro 42501 aqui, é a Policy do banco (que já limpamos no SQL)
+                    st.error(f"Erro ao enviar: {str(e)}")
+                    
 st.write("")
 st.caption("MuseIA Digital - A inteligência humana que controla a IA.")
