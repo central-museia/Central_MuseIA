@@ -78,7 +78,6 @@ with aba_cadastro:
                 
                 if sucesso:
                     st.success("✅ Conta criada! Por favor, faça o login na aba 'Entrar'.")
-                    st.balloons()
                 else:
                     # Se o erro for RLS, ele aparecerá aqui para sabermos
                     st.error(f"Erro técnico: {msg}")
