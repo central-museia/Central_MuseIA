@@ -53,7 +53,7 @@ st.divider()
 # --- FORMULÁRIO DE CONTATO ---
 st.subheader("✉️ Enviar mensagem")
 
-with st.form("form_contato"):
+with st.form("form_contato", clear_on_submit=True):
     assunto = st.selectbox(
         "Como podemos te ajudar?",
         [
@@ -94,7 +94,6 @@ with st.form("form_contato"):
                     resultado = supabase.table("fale_conosco").insert(dados_contato).execute()
                     
                     st.success("✅ Mensagem enviada com sucesso! Retornaremos em breve.")
-                    st.balloons()
                 except Exception as e:
                     # Se der erro 42501 aqui, é a Policy do banco (que já limpamos no SQL)
                     st.error(f"Erro ao enviar: {str(e)}")
