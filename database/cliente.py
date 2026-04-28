@@ -33,24 +33,31 @@ def cadastrar_usuario(nome, email, senha):
         supabase = get_client()
         email_limpo = email.strip().lower()
 
-        # 1. VERIFICAÇÃO (Já existe no seu código)
         checar = supabase.table("usuarios").select("email").eq("email", email_limpo).execute()
         if checar.data:
             return False, "Este e-mail já está cadastrado na MuseIA."
 
-        # 3. SALVAR NA SUA TABELA (O que você já faz)
         senha_protegida = hash_senha(senha)
+
         dados = {
             "nome": nome,
             "email": email_limpo,
             "senha": senha_protegida,
-            "status_pagamento": "pendente"
+            "status_pagamento": "pendente",
+            "ativo": True,
+            "bloqueado": False
         }
-        supabase.table("usuarios").insert(dados).execute()
+
+        resposta = supabase.table("usuarios").insert(dados).execute()
+
+        # 👇 DIAGNÓSTICO REAL
+        print(resposta)
+
         return True, "Cadastro realizado!"
+    
     except Exception as e:
         return False, f"Erro: {str(e)}"
-
+        
 # Mantenha as funções de validar_login e recuperar_senha abaixo...
 # =========================================
 # 🔐 ACESSO
