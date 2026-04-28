@@ -38,18 +38,13 @@ def cadastrar_usuario(nome, email, senha):
         if checar.data:
             return False, "Este e-mail já está cadastrado na MuseIA."
 
-        # 2. CADASTRO OFICIAL NO MOTOR DO SUPABASE (O que falta!)
-        # Isso faz o Supabase reconhecer o e-mail para enviar recuperação depois
-        auth_res = supabase.auth.sign_up({"email": email_limpo, "password": senha})
-
         # 3. SALVAR NA SUA TABELA (O que você já faz)
         senha_protegida = hash_senha(senha)
         dados = {
             "nome": nome,
             "email": email_limpo,
             "senha": senha_protegida,
-            "ativo": True,
-            "data_inicio": datetime.now().isoformat()
+            "status_pagamento": "pendente"
         }
         supabase.table("usuarios").insert(dados).execute()
         return True, "Cadastro realizado!"
