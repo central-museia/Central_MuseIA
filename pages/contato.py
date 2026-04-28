@@ -38,7 +38,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("📩 Fale com a MuseIA")
-st.write("Precisa de ajuda, suporte ou quer falar com a gente? Responda rápido e direto.")
+st.write("Precisa de ajuda, suporte ou quer falar com a gente?")
 
 # --- SEÇÃO DE INFORMAÇÕES (TEXTO CORRIGIDO) ---
 st.markdown(f"""
