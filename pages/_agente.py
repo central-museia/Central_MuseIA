@@ -1,6 +1,7 @@
 from utils.pdf import exportar_resultado_pdf
 from utils.factory import executar_agente
 from utils.pdf import ler_arquivo
+from database.cliente import contar_execucao_agente
 
 import streamlit as st
 from datetime import datetime
@@ -188,6 +189,10 @@ if st.session_state.processamento_liberado:
     else:
         if st.session_state.executar_agora:
             executar_agente(st.session_state.input_execucao, regras, codigo_python)
+
+            # ✅ CONTADOR AQUI (linha nova)
+            contar_execucao_agente(ag.get("id"))
+    
             st.session_state.executar_agora = False
             st.success("Resultado gerado!")
 
