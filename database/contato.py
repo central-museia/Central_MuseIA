@@ -53,11 +53,13 @@ with st.form("form_contato"):
     assunto = st.selectbox(
         "Assunto",
         [
-            "Suporte Técnico",
-            "Dúvida",
-            "Sugestão",
-            "Financeiro",
-            "Outro"
+            "Suporte Técnico (Erro ou Acesso)"
+            "Financeiro / Pagamentos"
+            "Dúvidas sobre os Agentes"
+            "Parcerias e Afiliados"
+            "Trabalhe Conosco"
+            "Sugestões de novos Robôs"
+            "Outros"
         ]
     )
 
