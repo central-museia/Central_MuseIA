@@ -49,7 +49,7 @@ st.write("Nos envie uma mensagem e retornaremos o mais rápido possível.")
 st.divider()
 
 # 🧾 FORMULÁRIO REAL (STREAMLIT)
-with st.form("form_contato"):
+with st.form("form_contato", clear_on_submit=True):
 
     nome = st.text_input("Seu nome")
     email = st.text_input("Seu e-mail")
@@ -81,6 +81,5 @@ with st.form("form_contato"):
 
             if sucesso:
                 st.success("Mensagem enviada com sucesso!")
-                st.balloons()
             else:
                 st.error("Não foi possível enviar. Tente novamente.")
