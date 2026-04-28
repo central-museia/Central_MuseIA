@@ -57,6 +57,36 @@ def cadastrar_usuario(nome, email, senha):
     
     except Exception as e:
         return False, f"Erro: {str(e)}"
+
+# =========================================
+# 📩 FALE CONOSCO
+# =========================================
+
+def inserir_fale_conosco(nome, email, assunto, mensagem):
+    try:
+        supabase = get_client()
+
+        dados = {
+            "nome": nome.strip(),
+            "email": email.strip().lower(),
+            "assunto": assunto,
+            "mensagem": mensagem.strip(),
+            "status": "Pendente"
+        }
+
+        resposta = supabase.table("fale_conosco").insert(dados).execute()
+
+        # 🔍 DIAGNÓSTICO REAL (não tira agora)
+        print("FALE_CONOSCO:", resposta)
+
+        if hasattr(resposta, "data") and resposta.data:
+            return True
+        else:
+            return False
+
+    except Exception as e:
+        print("ERRO FALE_CONOSCO:", e)
+        return False
         
 # Mantenha as funções de validar_login e recuperar_senha abaixo...
 # =========================================
