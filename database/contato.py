@@ -16,28 +16,32 @@ def get_client():
     st.stop()
 
 # 💾 INSERT
-def inserir_mensagem(nome, email, assunto, mensagem):
+def inserir_fale_conosco(nome, email, assunto, mensagem):
     try:
         supabase = get_client()
 
         dados = {
-            "nome": nome,
+            "nome": nome.strip(),
             "email": email.strip().lower(),
             "assunto": assunto,
-            "mensagem": mensagem,
+            "mensagem": mensagem.strip(),
             "status": "Pendente"
         }
 
         resposta = supabase.table("fale_conosco").insert(dados).execute()
 
-        st.write(resposta)  # 👈 diagnóstico real
+        # 🔍 DIAGNÓSTICO REAL (não tira agora)
+        print("FALE_CONOSCO:", resposta)
 
-        return bool(resposta.data)
+        if hasattr(resposta, "data") and resposta.data:
+            return True
+        else:
+            return False
 
     except Exception as e:
-        st.error(f"Erro técnico: {e}")
+        print("ERRO FALE_CONOSCO:", e)
         return False
-
+        
 # 🎨 UI
 st.title("📩 Fale Conosco")
 st.write("Nos envie uma mensagem e retornaremos o mais rápido possível.")
