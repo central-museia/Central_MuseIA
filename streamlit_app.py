@@ -1,3 +1,4 @@
+st.write("DEBUG:", st.secrets)
 import streamlit as st
 import os
 import sys
