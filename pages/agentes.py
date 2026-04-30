@@ -141,8 +141,3 @@ for i, ag in enumerate(agentes_filtrados):
                     # Se falhar, tenta pelo título que definimos no maestro
                     st.switch_page("pages/_agente.py")
 
-# No arquivo pages/login.py
-st.markdown("---")
-if st.button("Voltar"):
-    # Chamando o arquivo da vitrine diretamente
-    st.switch_page("streamlit_app.py")
