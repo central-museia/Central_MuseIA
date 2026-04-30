@@ -7,26 +7,19 @@ from engine.prompt_loader import buscar_prompt_ativo
 def executar_agente(agente, input_data, supabase, contexto_extra=None):
 
     # =========================================================
-    # 1. DADOS DO AGENTE (REAL)
+    # 1. DADOS DO AGENTE
     # =========================================================
     agente_id = agente["id"]
     codigo_python = agente.get("codigo_python", None)
     regras = agente.get("regras_processamento", {})
 
     # =========================================================
-    # 2. PROMPT (TABELA PROMPTS)
+    # 2. PROMPT (BANCO DE DADOS)
     # =========================================================
-    def buscar_prompt_ativo(supabase, agente_id):
-    res = (
-        supabase.table("prompts")
-        .select("prompt")
-        .eq("agente_id", agente_id)
-        .eq("ativo", True)
-        .single()
-        .execute()
-    )
-
-    return res.data["prompt"] if res.data else ""
+    try:
+        prompt_mestre = buscar_prompt_ativo(supabase, agente_id)
+    except Exception as e:
+        return f"Erro ao buscar prompt: {str(e)}"
 
     # =========================================================
     # 3. INPUT
@@ -63,21 +56,31 @@ def executar_agente(agente, input_data, supabase, contexto_extra=None):
 {regras}
 
 ========================
-📌 ROBÔ PYTHON
+📌 RESULTADO DO ROBÔ PYTHON
 ========================
 {resultado_robo}
 
 ========================
-📌 CONTEXTO
+📌 CONTEXTO DO USUÁRIO
 ========================
 {contexto_extra if contexto_extra else "N/A"}
+
+========================
+📌 DADOS PROCESSADOS
+========================
+{dados}
 """
 
     # =========================================================
-    # 6. IA
+    # 6. IA COM FALLBACK
     # =========================================================
-    return resultado = executar_ia(
-    prompt_final,
-    dados_processados,
-    codigo_python
-)
+    try:
+        resultado = executar_ia(
+            prompt_final,
+            dados,
+            codigo_python
+        )
+        return resultado
+
+    except Exception as e:
+        return f"Erro na IA: {str(e)}"
