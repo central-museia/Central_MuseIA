@@ -76,4 +76,8 @@ def executar_agente(agente, input_data, supabase, contexto_extra=None):
     # =========================================================
     # 6. IA
     # =========================================================
-    return executar_ia(prompt_final, dados)
+    return resultado = executar_ia(
+    prompt_final,
+    dados_processados,
+    codigo_python
+)
