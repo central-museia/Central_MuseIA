@@ -16,7 +16,17 @@ def executar_agente(agente, input_data, supabase, contexto_extra=None):
     # =========================================================
     # 2. PROMPT (TABELA PROMPTS)
     # =========================================================
-    prompt_mestre = buscar_prompt_ativo(supabase, agente_id)
+    def buscar_prompt_ativo(supabase, agente_id):
+    res = (
+        supabase.table("prompts")
+        .select("prompt")
+        .eq("agente_id", agente_id)
+        .eq("ativo", True)
+        .single()
+        .execute()
+    )
+
+    return res.data["prompt"] if res.data else ""
 
     # =========================================================
     # 3. INPUT
