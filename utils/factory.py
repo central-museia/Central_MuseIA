@@ -1,41 +1,29 @@
-import streamlit as st
-from utils.ia import executar_ia, montar_prompt
-from utils.scraping import extrair_texto_resumido
-
-# ... (motores web, texto, decisao e estruturado permanecem iguais) ...
-
-# =========================================
-# 🔥 ORQUESTRADOR PRINCIPAL ATUALIZADO
-# =========================================
 def executar_agente(texto, regras, codigo_python=None):
-    # Recupera o objeto completo do agente que está na memória do Streamlit
+    # O objeto agente_selecionado já deve vir com o prompt_texto 
+    # carregado via JOIN no Supabase (agentes.id = prompts.agente_id)
     agente_completo = st.session_state.get("agente_selecionado", {})
     
     if not regras and not codigo_python:
         return texto
 
-    # 🔹 PRIORIDADE 1: CÓDIGO PYTHON (CHASSI DINÂMICO)
     if codigo_python:
         try:
-            # Preparamos o dicionário de configuração para o Chassi
-            # Ele agora envia o nome do robô e as regras do banco
+            # Configuração enviada para o Chassi respeitando as tabelas
             config_envio = {
-                "nome": agente_completo.get("nome", "Agente MuseIA"),
+                "id": agente_completo.get("id"),
+                "nome": agente_completo.get("nome"), # Usado apenas para o título do PDF
                 "regras_processamento": agente_completo.get("regras_processamento", {}),
-                "prompt": agente_completo.get("prompt_texto", "") # O prompt que buscaremos
+                "prompt": agente_completo.get("prompt_texto", "") # Texto da tabela prompts
             }
 
             escopo = {}
             exec(codigo_python, escopo)
 
             if "executar" in escopo:
-                # Passamos o texto e o dicionário de config para o Chassi
                 return escopo["executar"](texto, config_envio)
 
-            return "⚠️ Função 'executar' não encontrada no código."
-
+            return "⚠️ Função 'executar' não encontrada."
         except Exception as e:
-            return f"⚠️ Erro ao executar código do agente: {str(e)}"
-
-    # 🔹 PRIORIDADE 2: MOTOR PADRÃO (Legado)
-    # ... (restante do código original do motor_nome e usar_ia) ...
+            return f"⚠️ Erro: {str(e)}"
+    
+    # ... motores padrão ...
