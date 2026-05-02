@@ -1,6 +1,11 @@
+import streamlit as st  # 👈 ADICIONE ESTA LINHA AQUI
+from utils.ia import executar_ia, montar_prompt
+from utils.scraping import extrair_texto_resumido
+
+# ... restante do código (motor_web, motor_texto, etc) ...
+
 def executar_agente(texto, regras, codigo_python=None):
-    # O objeto agente_selecionado já deve vir com o prompt_texto 
-    # carregado via JOIN no Supabase (agentes.id = prompts.agente_id)
+    # Agora o st.session_state será reconhecido corretamente
     agente_completo = st.session_state.get("agente_selecionado", {})
     
     if not regras and not codigo_python:
@@ -8,12 +13,11 @@ def executar_agente(texto, regras, codigo_python=None):
 
     if codigo_python:
         try:
-            # Configuração enviada para o Chassi respeitando as tabelas
             config_envio = {
                 "id": agente_completo.get("id"),
-                "nome": agente_completo.get("nome"), # Usado apenas para o título do PDF
+                "nome": agente_completo.get("nome"),
                 "regras_processamento": agente_completo.get("regras_processamento", {}),
-                "prompt": agente_completo.get("prompt_texto", "") # Texto da tabela prompts
+                "prompt": agente_completo.get("prompt_texto", "")
             }
 
             escopo = {}
@@ -26,4 +30,4 @@ def executar_agente(texto, regras, codigo_python=None):
         except Exception as e:
             return f"⚠️ Erro: {str(e)}"
     
-    # ... motores padrão ...
+    # ... restante do orquestrador ...
